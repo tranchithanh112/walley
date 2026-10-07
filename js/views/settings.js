@@ -109,7 +109,9 @@ function backupHtml() {
   if (!backup.configured()) return '<p class="muted small">Bản này chưa bật sao lưu Google.</p>';
   if (!backup.connected()) return '<div class="set-actions"><button type="button" class="btn primary" data-bk="connect">Kết nối Google Drive</button></div>';
   const last = backup.lastBackup() ? new Date(backup.lastBackup()).toLocaleString(locale()) : 'chưa có';
+  const err = backup.lastBackupError();
   return `<p class="muted small">Sao lưu lần cuối: ${esc(last)}</p>
+    ${err ? `<p class="small neg">Lần sao lưu gần nhất bị lỗi: ${esc(err.message || String(err))}</p>` : ''}
     <div class="set-actions">
       <button type="button" class="btn primary" data-bk="sync">Sao lưu ngay</button>
       <button type="button" class="btn danger" data-bk="off">Ngắt kết nối</button>

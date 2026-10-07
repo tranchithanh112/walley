@@ -6,6 +6,11 @@ const { tr, setLang } = await import('../js/i18n.js');
 
 test('dịch các câu chính', () => {
   assert.equal(tr('Cài đặt'), 'Settings');
+  assert.equal(tr('Chưa sao lưu — sẽ thử lại khi có mạng'), 'Not backed up — will retry when online');
+  assert.equal(tr('Chưa sao lưu được lên Google Drive'), "Couldn't back up to Google Drive");
+  assert.equal(tr('Thử lại'), 'Retry');
+  assert.equal(tr('Lần sao lưu gần nhất bị lỗi: Google Drive lỗi 500'), 'Last backup failed: Google Drive lỗi 500');
+  assert.equal(tr('(ví đã xóa)'), '(deleted wallet)');
   assert.equal(tr('Hoàn tác'), 'Undo');
   assert.equal(tr('🍜 Ăn uống'), '🍜 Food');
   assert.equal(tr('Danh mục'), 'Categories');

@@ -69,14 +69,28 @@ function showLogin(on) {
   translateDom(b);
 }
 
+// Sao lưu nền thất bại: hiện "Chưa sao lưu" (spec §6/§7); ẩn khi lần sau thành công.
+function showSyncError(on) {
+  const b = document.getElementById('login-banner');
+  b.hidden = !on;
+  if (!on) return;
+  b.innerHTML = navigator.onLine
+    ? '<span>Chưa sao lưu được lên Google Drive</span><button type="button" class="btn">Thử lại</button>'
+    : '<span>Chưa sao lưu — sẽ thử lại khi có mạng</span>';
+  const btn = b.querySelector('button');
+  if (btn) btn.onclick = () => backup.syncNow(true).then((r) => { showSyncError(false); if (r === 'pulled') render(); }, (e) => toast(e.message, 'error'));
+  translateDom(b);
+}
+
 async function autoSync() {
   if (!backup.connected()) return;
   try {
     const r = await backup.syncNow();
-    showLogin(r === 'login');
+    if (r === 'login') showLogin(true); else showSyncError(false);
     if (r === 'pulled') render();
   } catch (e) {
-    console.warn('Walley auto-sync:', e); // tự đồng bộ chạy nền: không báo lỗi liên tục
+    console.warn('Walley auto-sync:', e);
+    showSyncError(true);
   }
 }
 

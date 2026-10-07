@@ -137,8 +137,15 @@ let queue = Promise.resolve();
  * Tải bản trên Drive, gộp với máy này, ghi lại bên nào thiếu. Xếp hàng, không chạy chồng.
  * interactive = true chỉ khi người dùng vừa bấm nút. Trả về 'off' | 'login' | 'pulled' | 'pushed' | 'same'.
  */
+let lastError = null;
+/** Lỗi của lần đồng bộ gần nhất (null nếu lần đó thành công). */
+export const lastBackupError = () => lastError;
+
 export function syncNow(interactive = false) {
-  const go = () => doSync(interactive);
+  const go = () => doSync(interactive).then(
+    (r) => { if (r !== 'off' && r !== 'login') lastError = null; return r; },
+    (e) => { lastError = e; throw e; },
+  );
   const run = queue.then(go, go);
   queue = run.catch(() => {});
   return run;

@@ -31,6 +31,9 @@ const EXACT = {
     'Your browser is blocking storage (private mode?) — data will be lost when you close the app.',
   'Không lưu được dữ liệu trên máy — bộ nhớ đầy?': "Couldn't save data on this device — storage full?",
   'Cần đăng nhập lại Google để sao lưu': 'Sign in to Google again to back up', 'Đăng nhập': 'Sign in',
+  'Chưa sao lưu — sẽ thử lại khi có mạng': 'Not backed up — will retry when online',
+  'Chưa sao lưu được lên Google Drive': "Couldn't back up to Google Drive", 'Thử lại': 'Retry',
+  '(ví đã xóa)': '(deleted wallet)',
 
   // ---- tổng hợp / số dư
   'Tỷ lệ tiết kiệm': 'Savings rate', 'Quỹ dự phòng': 'Emergency fund', 'Tháng này': 'This month',
@@ -253,7 +256,8 @@ const RULES = [
   [/^Tổng (\d+)% — cần đúng 100%$/, 'Total $1% — must be exactly 100%'],
   [/^Đã đổi ngày nhận lương thành ngày (\d+)$/, 'Payday changed to day $1'],
   [/^Bước (\d+)\/(\d+)$/, 'Step $1 of $2'],
-  [/^Sao lưu lần cuối: (.+)$/, (m, v) => `Last backup: ${v === 'chưa có' ? 'never' : v}`],
+  [/^Lần sao lưu gần nhất bị lỗi: (.+)$/, 'Last backup failed: $1'],
+  [/^Sao lưu lần cuối: (.+)$/,(m, v) => `Last backup: ${v === 'chưa có' ? 'never' : v}`],
   [/^Google Drive lỗi (\d+)$/, 'Google Drive error $1'],
   [/^Đã khôi phục (.+)$/, 'Restored $1'],
   [/^Đã thêm (.+)$/, 'Added $1'],
