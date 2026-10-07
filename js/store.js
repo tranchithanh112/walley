@@ -1,5 +1,6 @@
 import { idbGet, idbSet } from './idb.js';
 import { defaultData } from './budget.js';
+import { getLang } from './i18n.js';
 
 // `state` = dữ liệu người dùng (lưu IndexedDB, sao lưu Google Drive, xuất / nhập file).
 
@@ -36,10 +37,10 @@ export let storageOk = true;
 export async function loadState() {
   try {
     const saved = await idbGet('data');
-    replaceState(saved || defaultData());
+    replaceState(saved || defaultData({ lang: getLang() }));
   } catch {
     storageOk = false; // chế độ riêng tư / trình duyệt chặn IndexedDB: app vẫn chạy, nhưng không lưu
-    replaceState(defaultData());
+    replaceState(defaultData({ lang: getLang() }));
   }
 }
 
