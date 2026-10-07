@@ -88,7 +88,15 @@ export function generateRecurring(b, today = localToday()) {
   return n;
 }
 
-/** Lương dự kiến = tổng khoản thu định kỳ hằng tháng đang bật. */
+/** Đổi ngày lương; khoản lương tự động đang ghi vào ngày lương cũ đi theo ngày mới. */
+export function movePayday(b, newDay) {
+  for (const r of b.recurring) {
+    if (r.type === 'income' && r.cat === 'salary' && Number(r.day) === b.payday) r.day = newDay;
+  }
+  b.payday = newDay;
+}
+
+/** Lương dự kiến =tổng khoản thu định kỳ hằng tháng đang bật. */
 export function expectedIncome(b) {
   return b.recurring
     .filter((r) => r.type === 'income' && r.active !== false && (Number(r.every) || 1) === 1)

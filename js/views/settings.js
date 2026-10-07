@@ -1,6 +1,6 @@
 import { state, commit, replaceState, serialize, parseBackup } from '../store.js';
 import { openSheet } from '../sheet.js';
-import { generateRecurring, catMap, monthKey, localToday, shiftMonth, mergeBudget } from '../budget.js';
+import { generateRecurring, catMap, monthKey, localToday, shiftMonth, mergeBudget, movePayday } from '../budget.js';
 import { fmt, parseAmount } from '../money.js';
 import { esc, uid, toast, downloadFile } from '../util.js';
 import { tr, setLang, getLang, locale } from '../i18n.js';
@@ -84,7 +84,8 @@ export function renderSettings(body, ctx) {
 
   body.querySelector('[name="payday"]').onchange = (e) => {
     const n = Number(e.target.value);
-    state.payday = n;
+    movePayday(state, n);
+    generateRecurring(state); // ngày lương mới có thể đã qua trong tháng này
     commit({ config: true });
     ctx.rerender();
     toast(`Đã đổi ngày nhận lương thành ngày ${n}`, 'ok');

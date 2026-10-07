@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  defaultData, generateRecurring, periodSummary, spendingBudget, expectedIncome, mergeBudget, restoreTx, dayLabel,
+  defaultData, generateRecurring, periodSummary, spendingBudget, expectedIncome, mergeBudget, restoreTx, dayLabel, movePayday,
 } from '../js/budget.js';
 import { periodOf } from '../js/period.js';
 
@@ -112,4 +112,18 @@ test('restoreTx giữ thời điểm ghi gốc', () => {
 test('dayLabel', () => {
   assert.equal(dayLabel('2026-10-06', '2026-10-06'), 'Hôm nay');
   assert.equal(dayLabel('2026-09-30', '2026-10-01'), 'Hôm qua');
+});
+
+test('movePayday: lương tự động cùng ngày lương cũ đi theo ngày mới', () => {
+  const b = defaultData();
+  b.payday = 5;
+  b.recurring = [
+    { id: 'salary', type: 'income', cat: 'salary', day: 5 },
+    { id: 'sal2', type: 'income', cat: 'salary', day: 20 },
+    { id: 'rent', type: 'expense', cat: 'rent', day: 5 },
+    { id: 'bonus', type: 'income', cat: 'bonus', day: 5 },
+  ];
+  movePayday(b, 10);
+  assert.equal(b.payday, 10);
+  assert.deepEqual(b.recurring.map((r) => r.day), [10, 20, 5, 5]);
 });
