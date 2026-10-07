@@ -79,6 +79,10 @@ const EXACT = {
   'Không tìm thấy khoản này — có thể vừa bị xóa trên máy khác': "Couldn't find this entry — it may have just been deleted on another device",
   'Đã cập nhật khoản chi': 'Expense updated', 'Đã cập nhật khoản thu': 'Income updated',
   'Đã khôi phục khoản chi': 'Expense restored', 'Đã khôi phục khoản thu': 'Income restored',
+  'Chuyển': 'Transfer', 'Từ ví': 'From', 'Đến ví': 'To', 'Chọn 2 ví khác nhau': 'Pick two different wallets',
+  'Lưu khoản chuyển': 'Save transfer', 'Sửa khoản chuyển': 'Edit transfer',
+  'Đã cập nhật khoản chuyển': 'Transfer updated', 'Đã khôi phục khoản chuyển': 'Transfer restored',
+  'Cần ít nhất 2 ví để chuyển tiền — thêm ví ở tab Ví': 'You need at least 2 wallets to transfer — add one in the Wallet tab',
   'Tiêu vào đâu': 'Where your money went', 'Chưa có khoản tiêu nào trong tháng.': 'No spending this month.',
   'Chưa có khoản để dành nào trong tháng.': 'Nothing saved or invested this month.',
   'Khoản tự động hằng tháng': 'Recurring entries', '+ Thêm': '+ Add', 'Chưa có khoản tự động nào.': 'No recurring entries yet.',
@@ -177,7 +181,8 @@ const RULES = [
   [/^Ngày (\d+)(?: · (Hằng tháng|Hằng năm|(\d+) tháng\/lần))?( · .+)?$/, (m, d, e, n, rest = '') =>
     `Day ${d}` + (e ? ` · ${e === 'Hằng tháng' ? 'Monthly' : e === 'Hằng năm' ? 'Yearly' : `Every ${n} months`}` : '') + rest],
   [/^Danh mục (thu|chi)$/, (m, k) => `${k === 'thu' ? 'Income' : 'Expense'} category`],
-  [/^Đã xóa khoản (chi|thu) (.+)$/, (m, k, v) => `${k === 'chi' ? 'Expense' : 'Income'} deleted: ${v}`],
+  [/^Đã xóa khoản (chi|thu|chuyển) (.+)$/, (m, k, v) => `${{ chi: 'Expense', thu: 'Income', 'chuyển': 'Transfer' }[k]} deleted: ${v}`],
+  [/^Đã chuyển (.+) · (.+) → (.+)$/, 'Transferred $1 · $2 → $3'],
   [/^Đã lưu khoản tự động (.+?)(?: · đã ghi (\d+) khoản đến hôm nay)?$/, (m, name, n) =>
     `Recurring entry saved: ${name}` + (n ? ` · ${n} ${n === '1' ? 'entry' : 'entries'} logged up to today` : '')],
   [/^Đã (lưu|thêm|xóa|khôi phục) danh mục (.+)$/, (m, v, n) =>

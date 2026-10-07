@@ -12,6 +12,9 @@ test('dịch các câu chính', () => {
   assert.equal(tr('Đã xóa khoản chi 45.000 ₫'), 'Expense deleted: 45.000 ₫');
   assert.equal(tr('Trang chủ'), 'Home');
   assert.equal(tr('🏠 Tiền nhà'), '🏠 Rent');
+  assert.equal(tr('Đã chuyển 50.000 ₫ · A → B'), 'Transferred 50.000 ₫ · A → B');
+  assert.equal(tr('Đã xóa khoản chuyển 50.000 ₫'), 'Transfer deleted: 50.000 ₫');
+  assert.equal(tr('Lưu khoản chuyển'), 'Save transfer');
 });
 
 test('tiếng Việt giữ nguyên', () => {

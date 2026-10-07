@@ -81,6 +81,7 @@ async function init() {
   window.addEventListener('wl:save-failed', () => toast('Không lưu được dữ liệu trên máy — bộ nhớ đầy?', 'error'));
   if (generateRecurring(state, localToday())) commit();
   document.getElementById('fab').innerHTML = icon('plus');
+  document.getElementById('fab').onclick = () => import('./views/entry.js').then((m) => m.openEntry({ onDone: ctx.rerender }));
   onCommit(scheduleBackup);
   render();
   showFlash();
