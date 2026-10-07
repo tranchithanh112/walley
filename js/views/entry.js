@@ -142,7 +142,7 @@ export function openEntry({ tx = null, type = 'expense', date = null, from = nul
   const editing = Boolean(tx);
   const ui = { type: tx?.type || type, cat: tx?.cat || null };
   const title = () => (editing ? `Sửa khoản ${KIND[ui.type]}` : 'Ghi khoản mới');
-  const fromSel = tx?.type === 'transfer' ? tx.wallet : from || lastWallet();
+  const fromSel = tx ? tx.wallet : from || lastWallet();
   // mặc định "Đến ví" khác "Từ ví"
   const toSel = tx?.type === 'transfer' ? tx.to : to || visibleWallets().find((w) => w.id !== fromSel)?.id || '';
   // khoản chuyển cũ gắn ví đã ẩn vẫn sửa được (2 ô chọn vẫn hiện ví đó)
@@ -163,7 +163,7 @@ export function openEntry({ tx = null, type = 'expense', date = null, from = nul
       <div class="field-row">
         <label class="field"><span>Ngày <small class="day-hint muted"></small></span>
           <input name="date" type="date" required value="${esc(tx?.date || date || localToday())}"></label>
-        <div class="entry-wallet">${walletField('wallet', 'Ví', tx && tx.type !== 'transfer' ? tx.wallet : lastWallet())}</div>
+        <div class="entry-wallet">${walletField('wallet', 'Ví', tx ? tx.wallet : lastWallet())}</div>
       </div>
       <button class="btn primary big entry-save"></button>
       ${editing ? '<button type="button" class="link danger entry-del">Xóa khoản này</button>' : ''}
