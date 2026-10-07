@@ -157,6 +157,9 @@ const EXACT = {
   'Nhập file sẽ gộp với dữ liệu đang có trên máy, không xóa gì.': 'Importing a file merges it with the data on this device — nothing is deleted.',
   'Gộp dữ liệu trong file với dữ liệu trên máy này?': "Merge the file's data with the data on this device?",
   'File không đúng định dạng của Walley': 'Not a Walley backup file', 'Chính sách quyền riêng tư': 'Privacy policy',
+  'Dùng cài đặt trong file (ví, danh mục, hũ, ngày lương, đơn vị tiền)? Chọn Hủy để giữ cài đặt trên máy này.':
+    "Use the file's settings (wallets, categories, jars, payday, currency)? Choose Cancel to keep this device's settings.",
+  'Đơn vị tiền trong file khác máy này — số tiền không được quy đổi': "The file's currency differs from this device — amounts are not converted",
   // sao lưu (backup.js)
   'App chưa được cấu hình Google': 'The app is not set up for Google',
   'Không tải được Google — kiểm tra mạng': "Couldn't load Google — check your connection",

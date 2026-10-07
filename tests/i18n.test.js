@@ -91,4 +91,7 @@ test('tab cài đặt', () => {
   assert.equal(tr('Đã lưu khoản tự động Lương · đã ghi 2 khoản đến hôm nay'), 'Recurring entry saved: Salary · 2 entries logged up to today');
   assert.equal(tr('Tháng 10/2026'), 'Oct 2026');
   assert.equal(tr('Hũ Thiết yếu'), 'Jar Essentials');
+  assert.equal(tr('Dùng cài đặt trong file (ví, danh mục, hũ, ngày lương, đơn vị tiền)? Chọn Hủy để giữ cài đặt trên máy này.'),
+    "Use the file's settings (wallets, categories, jars, payday, currency)? Choose Cancel to keep this device's settings.");
+  assert.equal(tr('Đơn vị tiền trong file khác máy này — số tiền không được quy đổi'), "The file's currency differs from this device — amounts are not converted");
 });

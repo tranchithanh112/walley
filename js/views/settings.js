@@ -51,7 +51,7 @@ export function renderSettings(body, ctx) {
       <p class="muted small">Mỗi khi có thu nhập, app chia theo tỷ lệ này để tính "Còn tiêu được" và mục tiêu để dành.</p>
       <form id="jar-form" class="set-jars" novalidate>
         ${b.jars.map((j) => `<label class="jar-pct"><span><b>${esc(j.name)}</b> <small class="muted">${JAR_DESC[j.id] || ''}</small></span>
-          <span class="pct-input"><input name="${esc(j.id)}" type="number" inputmode="numeric" min="0" max="100" step="1" value="${j.pct}"><span>%</span></span></label>`).join('')}
+          <span class="pct-input"><input name="${esc(j.id)}" type="number" inputmode="numeric" min="0" max="100" step="1" value="${Number(j.pct) || 0}"><span>%</span></span></label>`).join('')}
         <p class="jar-total" aria-live="polite"></p>
         <button class="btn primary">Lưu tỷ lệ</button>
       </form>
@@ -185,10 +185,15 @@ function bindData(root, ctx) {
         throw err instanceof SyntaxError ? new Error('File không đúng định dạng của Walley') : err;
       }
       if (confirm('Gộp dữ liệu trong file với dữ liệu trên máy này?')) {
-        replaceState(mergeBudget(JSON.parse(JSON.stringify(state)), data));
+        const useFile = confirm('Dùng cài đặt trong file (ví, danh mục, hũ, ngày lương, đơn vị tiền)? Chọn Hủy để giữ cài đặt trên máy này.');
+        const local = JSON.parse(JSON.stringify(state));
+        if (useFile) local.configAt = -1; // ponytail: -1 để cấu hình trong file thắng, như reconcile firstSync
+        const diffCur = !useFile && data.currency !== state.currency;
+        replaceState(mergeBudget(local, data));
         commit();
         ctx.rerender();
         toast('Đã nhập file', 'ok');
+        if (diffCur) toast('Đơn vị tiền trong file khác máy này — số tiền không được quy đổi', 'info');
       }
     } catch (err) {
       toast(err.message, 'error');
@@ -205,7 +210,7 @@ function recRow(r, cats) {
   return `<button type="button" class="set-row" data-rec="${esc(r.id)}">
     <span class="bd-ic">${esc(c?.icon || '•')}</span>
     <span class="set-main"><b>${esc(c?.name || r.cat)}${r.note ? ` · ${esc(r.note)}` : ''}</b>
-      <small>Ngày ${Number(r.day) || 1} · ${EVERY[r.every || 1] || `${r.every} tháng/lần`}${w ? ` · ${esc(w)}` : ''}</small></span>
+      <small>Ngày ${Number(r.day) || 1} · ${EVERY[r.every || 1] || `${Number(r.every) || 1} tháng/lần`}${w ? ` · ${esc(w)}` : ''}</small></span>
     <span class="bd-amt ${r.type === 'income' ? 'pos' : ''}">${r.type === 'income' ? '+' : '−'}${fmt(Number(r.amount))}</span>
   </button>`;
 }
@@ -242,7 +247,7 @@ function openRec(r, ctx) {
       </div>
       <div class="field-row">
         <label class="field"><span>Bắt đầu từ</span><select name="startMonth">
-          ${months.map((m) => `<option value="${m}" ${m === start ? 'selected' : ''}>${monthLabel(m)}</option>`).join('')}
+          ${months.map((m) => `<option value="${esc(m)}" ${m === start ? 'selected' : ''}>${esc(monthLabel(m))}</option>`).join('')}
         </select></label>
         ${walletField('wallet', 'Ví', r?.wallet || lastWallet())}
       </div>
@@ -403,7 +408,8 @@ function openCat(c, ctx) {
 
 function bindJars(form, ctx) {
   const ids = state.jars.map((j) => j.id);
-  const total = () => ids.reduce((a, id) => a + (Number(form.elements[id].value) || 0), 0);
+  const pct = (id) => Math.min(100, Math.max(0, Math.trunc(Number(form.elements[id].value)) || 0));
+  const total = () => ids.reduce((a, id) => a + pct(id), 0);
   const out = form.querySelector('.jar-total');
   const paint = () => {
     const t = total();
@@ -416,7 +422,7 @@ function bindJars(form, ctx) {
     e.preventDefault();
     const t = total();
     if (t !== 100) return toast(`Tổng tỷ lệ đang là ${t}%, cần bằng 100%`, 'error');
-    state.jars = state.jars.map((j) => ({ ...j, pct: Number(form.elements[j.id].value) || 0 }));
+    state.jars = state.jars.map((j) => ({ ...j, pct: pct(j.id) }));
     commit({ config: true });
     ctx.rerender();
     toast('Đã lưu cách chia thu nhập', 'ok');
