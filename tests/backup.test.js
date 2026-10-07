@@ -45,3 +45,13 @@ test('reconcile: firstSync: cấu hình trên Drive thắng khi máy mới khôi
   const n = reconcile(local, remote);
   assert.equal(n.merged.payday, 1);
 });
+
+test('reconcile: firstSync giữ ví trên máy mà giao dịch trên máy còn dùng', () => {
+  const base = defaultData({ now: 1, today: '2026-10-01' });
+  const local = JSON.parse(JSON.stringify(base));
+  local.wallets.push({ id: 'vcb', name: 'VCB', type: 'bank', amount: 0 });
+  local.txs.push({ id: 'l', date: '2026-10-03', type: 'expense', amount: 1, cat: 'food', wallet: 'vcb', u: 1 });
+  const remote = { ...JSON.parse(JSON.stringify(base)), configAt: 5 };
+  const f = reconcile(local, remote, { firstSync: true });
+  assert.ok(f.merged.wallets.some((w) => w.id === 'vcb'));
+});

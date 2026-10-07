@@ -159,15 +159,28 @@ export function mergeBudget(a, b) {
   if (!a) return b;
   if (!b) return a;
   const cfg = (a.configAt || 0) >= (b.configAt || 0) ? a : b;
+  const other = cfg === a ? b : a;
   const deleted = { ...b.deleted, ...a.deleted };
   const txs = new Map();
   for (const t of [...(b.txs || []), ...(a.txs || [])]) {
+    if (typeof t?.id !== 'string' || typeof t.date !== 'string') continue; // giao dịch hỏng
     const cur = txs.get(t.id);
     if (!cur || (t.u || 0) > (cur.u || 0)) txs.set(t.id, t);
   }
+  const merged = [...txs.values()].filter((t) => !deleted[t.id]).sort((x, y) => x.date.localeCompare(y.date));
+  const recurring = cfg.recurring || [];
+  // Ví / danh mục chỉ có ở bên thua nhưng còn được dùng → thêm lại (không hợp nhất hết vì xóa không có dấu xóa).
+  const keep = (key, refs) => {
+    const list = cfg[key] || [];
+    const have = new Set(list.map((x) => x?.id));
+    const used = new Set(refs.filter(Boolean));
+    return [...list, ...(other[key] || []).filter((x) => x && used.has(x.id) && !have.has(x.id))];
+  };
   return {
     ...cfg,
-    txs: [...txs.values()].filter((t) => !deleted[t.id]).sort((x, y) => x.date.localeCompare(y.date)),
+    wallets: keep('wallets', [...merged.flatMap((t) => [t.wallet, t.to]), ...recurring.map((r) => r?.wallet)]),
+    categories: keep('categories', [...merged.map((t) => t.cat), ...recurring.map((r) => r?.cat)]),
+    txs: merged,
     deleted,
     configAt: Math.max(a.configAt || 0, b.configAt || 0),
     onboarded: Boolean(a.onboarded || b.onboarded),

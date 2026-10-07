@@ -77,6 +77,31 @@ test('mergeBudget: hợp nhất giao dịch, cấu hình (gồm ví, ngày lươ
   assert.equal(m.wallets.length, 2);
 });
 
+test('mergeBudget: cấu hình thua vẫn giữ ví / danh mục mà giao dịch, khoản tự động còn dùng', () => {
+  const local = defaultData();
+  const remote = defaultData();
+  local.wallets.push({ id: 'vcb', name: 'VCB', type: 'bank', amount: 0 }, { id: 'unused', name: 'X', type: 'bank', amount: 0 });
+  local.categories.push({ id: 'pet', name: 'Thú cưng', type: 'expense', jar: 'nec' }, { id: 'gym', name: 'Gym', type: 'expense', jar: 'nec' });
+  local.txs.push({ ...tx('a', '2026-10-01', 'expense', 1, 'pet'), wallet: 'vcb' });
+  remote.recurring.push({ id: 'r', type: 'expense', amount: 1, cat: 'gym', wallet: 'cash', day: 1, every: 1, startMonth: '2026-10' });
+  remote.configAt = 10;
+  const m = mergeBudget(local, remote);
+  const ids = (xs) => xs.map((x) => x.id);
+  assert.ok(ids(m.wallets).includes('vcb'));
+  assert.ok(!ids(m.wallets).includes('unused'));
+  assert.ok(ids(m.categories).includes('pet'));
+  assert.ok(ids(m.categories).includes('gym'));
+  assert.equal(m.wallets.length, remote.wallets.length + 1);
+});
+
+test('mergeBudget: giao dịch hỏng không làm lỗi', () => {
+  const a = defaultData();
+  const b = defaultData();
+  a.txs.push({ id: 1 }, null, { id: 'x' }, tx('ok', '2026-10-01', 'expense', 1, 'food'));
+  const m = mergeBudget(a, b);
+  assert.deepEqual(m.txs.map((t) => t.id), ['ok']);
+});
+
 test('restoreTx giữ thời điểm ghi gốc', () => {
   const copy = restoreTx({ txs: [] }, { id: 'x', at: 7, u: 9 }, 'y');
   assert.equal(copy.id, 'y');
