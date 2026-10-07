@@ -54,7 +54,6 @@ Bỏ khi copy: Binance, futures, PnL, chứng khoán, Fmarket, `api/`, mật kh�
 {
   version: 1,
   currency: 'VND' | 'USD',   // mặc định: VND nếu ngôn ngữ trình duyệt là vi, ngược lại USD
-  lang: 'vi' | 'en',
   payday: 1..31,             // ngày nhận lương, mặc định 1
   jars: [{ id, name, pct }],                 // nec 50, save 20, invest 10, play 20 (như ifinance)
   categories: [{ id, name, icon, type, jar }],
@@ -82,6 +81,8 @@ Bỏ khi copy: Binance, futures, PnL, chứng khoán, Fmarket, `api/`, mật kh�
 ```
 
 Quy tắc:
+- Ngôn ngữ và sáng / tối là lựa chọn **riêng từng máy** (localStorage), không nằm trong dữ liệu sao lưu.
+- Khoản định kỳ chọn ngày 1–31; tháng ngắn hơn → ngày cuối tháng.
 - `transfer` trừ ví `wallet`, cộng ví `to`; **không** tính thu / chi, **không** vào hũ, **không** vào báo cáo.
 - Ví `credit` có số dư âm = đang nợ. Chi bằng thẻ là `expense` bình thường (tính vào hũ ngày tiêu). Trả sao kê = `transfer` ngân hàng → thẻ.
 - Đổi `currency` khi đã có dữ liệu: **chỉ đổi nhãn, không quy đổi**, có hộp xác nhận cảnh báo.
@@ -110,7 +111,7 @@ Quy tắc:
 
 ### 4.4 Tiền — `money.js`
 - VND: không số lẻ, `1.250.000 ₫` (vi) / `₫1,250,000` (en); bàn phím nhập có nút `000`.
-- USD: 2 số lẻ, `$1,250.00`; bàn phím có nút `.`.
+- USD: 2 số lẻ, `$1,250.00`; bàn phím có nút dấu thập phân và `000`.
 - Dùng `Intl.NumberFormat` theo `lang` + `currency`.
 
 ## 5. Màn hình
@@ -137,7 +138,7 @@ Giữ từ ifinance: hệ thống toast thành công / lỗi, Hoàn tác khi xó
 
 - **Google Identity Services** (token client), scope `https://www.googleapis.com/auth/drive.appdata` — file `walley.json` trong thư mục ẩn của app.
 - Không bắt đăng nhập; app chạy đầy đủ không cần Google.
-- Token chỉ trong bộ nhớ phiên; hết hạn → xin lại im lặng (`prompt: ''`), thất bại → nút "Kết nối lại".
+- Token giữ trong `sessionStorage` (≈ 1 giờ, không lưu lâu dài); hết hạn → xin lại im lặng (`prompt: ''`). Trình duyệt có thể chặn cửa sổ Google khi không có thao tác bấm → sao lưu tạm dừng tới khi người dùng bấm "Sao lưu ngay" (giới hạn của mô hình không có server).
 - **Tự sao lưu:** debounce 3 giây sau thay đổi; luôn tải bản trên Drive → `mergeBudget` → ghi.
 - Mở app / quay lại tab: tải và gộp nếu đã kết nối.
 - Mất mạng / lỗi: dữ liệu vẫn trên máy, hiện "Chưa sao lưu", thử lại khi `online`.
