@@ -31,8 +31,8 @@ export function renderWallets(root, ctx) {
     </div>
     <div class="card">
       <div class="card-head"><h3>Ví của bạn</h3><button type="button" class="btn" data-add>+ Thêm ví</button></div>
-      <div class="set-list">${shown.map(row).join('')}</div>
-      ${hidden.length ? `<details><summary class="muted small">Ví đã ẩn (${hidden.length})</summary><div class="set-list">${hidden.map(row).join('')}</div></details>` : ''}
+      <div class="set-list w-grid">${shown.map(row).join('')}</div>
+      ${hidden.length ? `<details><summary class="muted small">Ví đã ẩn (${hidden.length})</summary><div class="set-list w-grid">${hidden.map(row).join('')}</div></details>` : ''}
     </div>`;
   root.querySelector('[data-add]').onclick = () => openWallet(null, ctx);
   root.querySelectorAll('[data-w]').forEach((b) => {

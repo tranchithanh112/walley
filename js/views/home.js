@@ -55,6 +55,7 @@ export function renderHome(root, ctx) {
         <button class="btn" data-shift="1" aria-label="Kỳ sau" ${ui.key >= cur.key ? 'disabled' : ''}>›</button>
       </div>
     </div>
+    <div class="cols home-cols"><div>
     ${dueHtml}
     ${budgetCard(S, spendingBudget(S, p, today))}
     <div class="bd-sum">
@@ -62,6 +63,7 @@ export function renderHome(root, ctx) {
       <span><small>Tiêu</small><b>${fmt(S.spend, { compact: true })}</b></span>
       <span><small>Để dành</small><b>${fmt(S.saved, { compact: true })}</b></span>
     </div>
+    </div><div>
     ${byDay.size ? [...byDay].map(([d, list]) => `
       <section class="bd-day">
         <h4>${esc(dayLabel(d, today, locale()))}</h4>
@@ -70,7 +72,8 @@ export function renderHome(root, ctx) {
       <div class="card bd-empty">
         <p>Chưa có khoản nào trong kỳ này</p>
         <button type="button" class="btn primary" data-new="expense">Ghi khoản đầu tiên</button>
-      </div>`}`;
+      </div>`}
+    </div></div>`;
 
   const defaultDate = isCur ? today : p.start;
   root.querySelectorAll('[data-shift]').forEach((btn) => {

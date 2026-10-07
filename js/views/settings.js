@@ -25,6 +25,7 @@ export function renderSettings(body, ctx) {
   const b = state;
   const cats = catMap(b);
   body.innerHTML = `
+    <div class="set-cols">
     <div class="card">
       <h3>Kỳ lương</h3>
       <label class="field"><span>Ngày nhận lương</span>${daySelect('payday', b.payday)}</label>
@@ -75,6 +76,7 @@ export function renderSettings(body, ctx) {
         <button type="button" class="btn" data-export>Xuất file</button>
         <label class="btn">Nhập file<input type="file" accept="application/json,.json" hidden data-import></label>
       </div>
+    </div>
     </div>
 
     <p class="set-foot small"><a href="privacy.html">Chính sách quyền riêng tư</a></p>`;

@@ -36,6 +36,7 @@ export function renderReport(root, ctx) {
       </div>
     </div>
     ${summaryLine(S)}
+    <div class="cols">
     <div class="card">
       <h3>Tiêu vào đâu</h3>
       ${spendRows.length ? barList(spendRows, S.spend) : '<p class="empty">Chưa có khoản tiêu nào trong kỳ.</p>'}
@@ -43,6 +44,7 @@ export function renderReport(root, ctx) {
     <div class="card">
       <h3>Để dành & đầu tư</h3>
       ${saveRows.length ? barList(saveRows, S.saved) : '<p class="empty">Chưa có khoản để dành nào trong kỳ.</p>'}
+    </div>
     </div>
     <div class="card">
       <h3>6 kỳ gần nhất</h3>

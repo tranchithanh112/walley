@@ -26,7 +26,8 @@ function defaultCurrency() {
 export function renderOnboarding(root, ctx) {
   if (!curInit) { curInit = true; defaultCurrency(); }
   const last = step === TITLES.length - 1;
-  root.innerHTML = `<form class="ob" novalidate>
+  root.innerHTML = `<div class="ob-brand"><img class="logo" src="icons/icon.svg" alt=""><span class="brand-name">Walley</span></div>
+  <form class="ob" novalidate>
     <ol class="ob-dots" aria-label="Bước ${step + 1}/${TITLES.length}">${TITLES.map((_, i) => `<li class="${i === step ? 'on' : ''}"></li>`).join('')}</ol>
     ${step === 0 ? '<p class="ob-intro">Walley giúp bạn biết còn tiêu được bao nhiêu tới kỳ lương sau.</p>' : ''}
     <h2>${TITLES[step]}</h2>
