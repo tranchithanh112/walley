@@ -18,18 +18,17 @@ export const roundMoney = (v) => (decimals() ? Math.round(v * 100) / 100 : Math.
 export function fmt(v, { compact = false, sign = false } = {}) {
   if (v == null || !Number.isFinite(v)) return '—';
   const abs = Math.abs(v);
+  const r = roundMoney(v); // dấu theo giá trị đã làm tròn: -0,004 USD hiện $0.00
   let s;
-  if (compact && st.currency === 'VND' && st.lang === 'vi' && abs >= 1e6) {
-    s = abs >= 1e9
+  const full = () => new Intl.NumberFormat(loc(), { style: 'currency', currency: st.currency, minimumFractionDigits: decimals(), maximumFractionDigits: decimals() }).format(abs);
+  if (compact && st.lang === 'en' && abs >= 1e3) {
+    s = new Intl.NumberFormat(loc(), { style: 'currency', currency: st.currency, notation: 'compact', maximumFractionDigits: 1 }).format(abs);
+  } else if (compact && st.lang === 'vi' && st.currency === 'VND' && abs >= 1e6) {
+    s = Number((abs / 1e6).toFixed(1)) >= 1000
       ? `${(abs / 1e9).toLocaleString('vi-VN', { maximumFractionDigits: 2 })} tỷ`
       : `${(abs / 1e6).toLocaleString('vi-VN', { maximumFractionDigits: 1 })} tr`;
-  } else {
-    const opts = compact && abs >= 1e3
-      ? { notation: 'compact', maximumFractionDigits: 1 }
-      : { minimumFractionDigits: decimals(), maximumFractionDigits: decimals() };
-    s = new Intl.NumberFormat(loc(), { style: 'currency', currency: st.currency, ...opts }).format(abs);
-  }
-  return (v < 0 ? '−' : sign && v > 0 ? '+' : '') + s.replace(/ /g, ' ');
+  } else s = full();
+  return (r < 0 ? '−' : sign && r > 0 ? '+' : '') + s.replace(/\u00a0/g, ' ');
 }
 
 const UNITS = { k: 1e3, n: 1e3, nghìn: 1e3, ngàn: 1e3, tr: 1e6, triệu: 1e6, m: 1e6, tỷ: 1e9, ty: 1e9, b: 1e9 };
@@ -43,7 +42,13 @@ export function parseAmount(input) {
   const [, num, unit] = m;
   if (unit) return roundMoney(Number(num.replace(',', '.')) * UNITS[unit]); // "1.5tr" và "1,5tr" đều là 1,5 triệu
   if (!decimals()) return Number(num.replace(/[.,]/g, ''));
-  const v = Number(num.split(amountSep()).join('').replace(decSep(), '.'));
+  const g = amountSep(), d = decSep();
+  let t = num;
+  const gs = t.split(g);
+  if (!t.includes(d) && gs.length === 2 && gs[1].length !== 3) t = t.replace(g, d); // "12.5" (vi) / "1,5" (en) = số lẻ
+  const G = `\\${g}`, D = `\\${d}`;
+  if (!/\d/.test(t) || !(new RegExp(`^\\d{1,3}(${G}\\d{3})*(${D}\\d*)?$`).test(t) || new RegExp(`^\\d*(${D}\\d*)?$`).test(t))) return NaN;
+  const v = Number(t.split(g).join('').replace(d, '.'));
   return Number.isFinite(v) ? roundMoney(v) : NaN;
 }
 
@@ -53,7 +58,7 @@ const grouped = (raw, sep) => (sep === ',' ? /^[\d,]+$/ : /^[\d.]+$/).test(raw);
 export function formatAmountInput(s) {
   const raw = String(s ?? '');
   const sep = amountSep();
-  if (!grouped(raw, sep)) return raw;
+  if (st.currency === 'USD' || !grouped(raw, sep)) return raw; // USD: gõ sao giữ vậy (nhóm lại làm mơ hồ dấu thập phân)
   return raw.split(sep).join('').replace(/^0+(?=\d)/, '').replace(/\B(?=(\d{3})+(?!\d))/g, sep);
 }
 

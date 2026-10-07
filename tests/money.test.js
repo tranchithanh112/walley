@@ -47,6 +47,23 @@ test('parseAmount USD có số lẻ', () => {
   assert.equal(parseAmount('1.5k'), 1500);
   setMoney({ currency: 'USD', lang: 'vi' });
   assert.equal(parseAmount('1.250,75'), 1250.75);
+  assert.equal(parseAmount('12.5'), 12.5);
+  assert.equal(parseAmount('12,5'), 12.5);
+  assert.equal(parseAmount('1.234'), 1234);
+  setMoney({ currency: 'USD', lang: 'en' });
+  assert.equal(parseAmount('1,5'), 1.5);
+  assert.ok(Number.isNaN(parseAmount('1,2,3')));
+  assert.ok(Number.isNaN(parseAmount('.')));
+});
+
+test('fmt compact tiếng Việt và dấu', () => {
+  setMoney({ currency: 'VND', lang: 'vi' });
+  assert.equal(fmt(999999999, { compact: true }), '1 tỷ');
+  assert.ok(!/Tr|N/.test(fmt(999999, { compact: true })));
+  assert.ok(!fmt(1000, { compact: true }).includes(' N'));
+  setMoney({ currency: 'USD', lang: 'en' });
+  assert.equal(fmt(-0.004), '$0.00');
+  assert.equal(fmt(0.004, { sign: true }), '$0.00');
 });
 
 test('ô số tiền: nhóm nghìn, phím nhanh', () => {
@@ -61,7 +78,7 @@ test('ô số tiền: nhóm nghìn, phím nhanh', () => {
   assert.equal(formatAmountInput('45000'), '45,000');
   assert.equal(applyAmountKey('1.5', 'tr'), '1,500,000');
   setMoney({ currency: 'USD', lang: 'en' });
-  assert.equal(formatAmountInput('1250'), '1,250');
+  assert.equal(formatAmountInput('1250'), '1250');
   assert.equal(formatAmountInput('12.5'), '12.5');
   assert.equal(applyAmountKey('12', 'dot'), '12.');
   assert.equal(applyAmountKey('12.5', 'dot'), '12.5');
