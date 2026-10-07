@@ -187,10 +187,11 @@ function bindData(root, ctx) {
       if (confirm('Gộp dữ liệu trong file với dữ liệu trên máy này?')) {
         const useFile = confirm('Dùng cài đặt trong file (ví, danh mục, hũ, ngày lương, đơn vị tiền)? Chọn Hủy để giữ cài đặt trên máy này.');
         const local = JSON.parse(JSON.stringify(state));
-        if (useFile) local.configAt = -1; // ponytail: -1 để cấu hình trong file thắng, như reconcile firstSync
+        // ponytail: -1 / MAX để bên được chọn luôn thắng, bất kể configAt trong file
+        local.configAt = useFile ? -1 : Number.MAX_SAFE_INTEGER;
         const diffCur = !useFile && data.currency !== state.currency;
         replaceState(mergeBudget(local, data));
-        commit();
+        commit({ config: true }); // configAt = bây giờ: lần đồng bộ Drive sau không ghi đè cấu hình vừa chọn
         ctx.rerender();
         toast('Đã nhập file', 'ok');
         if (diffCur) toast('Đơn vị tiền trong file khác máy này — số tiền không được quy đổi', 'info');
