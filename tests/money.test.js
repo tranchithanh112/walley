@@ -18,6 +18,9 @@ test('fmt VND / USD theo ngôn ngữ', () => {
   assert.equal(fmt(12.5), '$12.50');
   assert.equal(fmt(1500, { compact: true }), '$1.5K');
   assert.equal(fmt(NaN), '—');
+  setMoney({ currency: 'USD', lang: 'vi' }); // USD luôn hiện kiểu Mỹ
+  assert.equal(fmt(1250), '$1,250.00');
+  assert.equal(fmt(1500, { compact: true }), '$1.5K');
 });
 
 test('roundMoney: VND số nguyên, USD 2 số lẻ', () => {
@@ -45,11 +48,12 @@ test('parseAmount USD có số lẻ', () => {
   assert.equal(parseAmount('1,250.75'), 1250.75);
   assert.equal(parseAmount('$9.999'), 10);
   assert.equal(parseAmount('1.5k'), 1500);
-  setMoney({ currency: 'USD', lang: 'vi' });
-  assert.equal(parseAmount('1.250,75'), 1250.75);
+  setMoney({ currency: 'USD', lang: 'vi' }); // USD nhập kiểu Mỹ (nhóm ',' lẻ '.') ở cả 2 ngôn ngữ
+  assert.equal(parseAmount('1,250.75'), 1250.75);
+  assert.ok(Number.isNaN(parseAmount('1.250,75')));
   assert.equal(parseAmount('12.5'), 12.5);
-  assert.equal(parseAmount('12,5'), 12.5);
-  assert.equal(parseAmount('1.234'), 1234);
+  assert.equal(parseAmount('12,5'), 12.5); // dấu lẻ loi không đủ 3 số → vẫn là số lẻ
+  assert.equal(parseAmount('1,234'), 1234);
   setMoney({ currency: 'USD', lang: 'en' });
   assert.equal(parseAmount('1,5'), 1.5);
   assert.ok(Number.isNaN(parseAmount('1,2,3')));
@@ -87,5 +91,6 @@ test('ô số tiền: nhóm nghìn, phím nhanh', () => {
   assert.equal(parseAmount('1250000'), 1250000);
   assert.equal(applyAmountKey('12.5', '000'), '12.5');
   setMoney({ currency: 'USD', lang: 'vi' });
-  assert.equal(applyAmountKey('1.250', '000'), '1250000');
+  assert.equal(applyAmountKey('1,250', '000'), '1250000');
+  assert.deepEqual(amountKeys(), [['dot', '.'], ['000', '000']]);
 });

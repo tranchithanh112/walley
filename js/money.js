@@ -8,9 +8,10 @@ export function setMoney({ currency, lang }) {
 }
 export const currency = () => st.currency;
 export const decimals = () => (st.currency === 'USD' ? 2 : 0);
-const loc = () => (st.lang === 'en' ? 'en-US' : 'vi-VN');
-/** Dấu nhóm nghìn trong ô nhập: 45.000 (tiếng Việt) / 45,000 (tiếng Anh). */
-export const amountSep = () => (st.lang === 'en' ? ',' : '.');
+// USD luôn theo kiểu Mỹ ($1,250.00) ở mọi ngôn ngữ; VND theo ngôn ngữ.
+const loc = () => (st.lang === 'en' || st.currency === 'USD' ? 'en-US' : 'vi-VN');
+/** Dấu nhóm nghìn trong ô nhập: 45.000 (VND tiếng Việt) / 45,000 (tiếng Anh hoặc USD). */
+export const amountSep = () => (loc() === 'en-US' ? ',' : '.');
 const decSep = () => (amountSep() === '.' ? ',' : '.');
 
 export const roundMoney = (v) => (decimals() ? Math.round(v * 100) / 100 : Math.round(v));
@@ -21,7 +22,7 @@ export function fmt(v, { compact = false, sign = false } = {}) {
   const r = roundMoney(v); // dấu theo giá trị đã làm tròn: -0,004 USD hiện $0.00
   let s;
   const full = () => new Intl.NumberFormat(loc(), { style: 'currency', currency: st.currency, minimumFractionDigits: decimals(), maximumFractionDigits: decimals() }).format(abs);
-  if (compact && st.lang === 'en' && abs >= 1e3) {
+  if (compact && loc() === 'en-US' && abs >= 1e3) {
     s = new Intl.NumberFormat(loc(), { style: 'currency', currency: st.currency, notation: 'compact', maximumFractionDigits: 1 }).format(abs);
   } else if (compact && st.lang === 'vi' && st.currency === 'VND' && abs >= 1e6) {
     s = Number((abs / 1e6).toFixed(1)) >= 1000
