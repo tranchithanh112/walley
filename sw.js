@@ -1,7 +1,7 @@
 // Service worker: mở app tức thì từ bản đã lưu (stale-while-revalidate), đồng thời tải bản mới ở nền
 // cho lần mở sau. Chỉ cache file cùng domain + thư viện CDN — không bao giờ cache Google (đăng nhập, Drive).
 // Tăng VERSION mỗi lần deploy có đổi JS/CSS → cache cũ bị dọn, không còn module cũ lẫn với trang mới.
-const VERSION = '1';
+const VERSION = '2';
 const CACHE = `walley-shell-v${VERSION}`;
 // Thư viện bên ngoài (Chart.js) cũng được lưu để mở app không phải chờ mạng.
 // Lưu ý: SW tự fetch nên domain phải có trong connect-src của CSP.
