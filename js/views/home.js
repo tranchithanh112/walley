@@ -9,7 +9,7 @@ import { openEntry } from './entry.js';
 
 // Trang chủ: kỳ lương đang xem — nhắc trả thẻ, "Còn tiêu được", tổng thu / tiêu / để dành, danh sách theo ngày.
 
-const ui = { key: null, showJars: false };
+const ui = { key: null, curKey: null, showJars: false };
 export const dm = (iso) => `${Number(iso.slice(8))}/${Number(iso.slice(5, 7))}`;
 export const periodLabel = (p) => `${dm(p.start)} – ${dm(p.end)}`;
 const walletName = (id) => state.wallets.find((w) => w.id === id)?.name || '';
@@ -28,7 +28,8 @@ export function openNewEntry(ctx) {
 export function renderHome(root, ctx) {
   const today = localToday();
   const cur = periodOf(today, state.payday);
-  ui.key ||= cur.key;
+  if (!ui.key || ui.key === ui.curKey) ui.key = cur.key; // đang xem kỳ hiện tại → theo kỳ mới (qua ngày lương / đổi ngày lương)
+  ui.curKey = cur.key;
   if (ui.key > cur.key) ui.key = cur.key; // đổi ngày lương có thể đẩy kỳ đang xem ra tương lai
   const p = shiftPeriod(ui.key, 0, state.payday);
   const isCur = ui.key === cur.key;
@@ -41,7 +42,7 @@ export function renderHome(root, ctx) {
 
   const cats = catMap(state);
   const byDay = new Map();
-  for (const t of [...S.txs].sort((x, y) => y.date.localeCompare(x.date) || (y.u || 0) - (x.u || 0))) {
+  for (const t of [...S.txs].sort((x, y) => y.date.localeCompare(x.date) || (y.at ?? y.u ?? 0) - (x.at ?? x.u ?? 0))) {
     if (!byDay.has(t.date)) byDay.set(t.date, []);
     byDay.get(t.date).push(t);
   }
@@ -87,7 +88,8 @@ export function renderHome(root, ctx) {
   root.querySelectorAll('[data-pay]').forEach((btn) => {
     btn.onclick = () => openEntry({
       type: 'transfer',
-      from: state.wallets.find((w) => w.type === 'bank' && !w.hidden)?.id || null,
+      from: (state.wallets.find((w) => w.type === 'bank' && !w.hidden)
+        || state.wallets.find((w) => !w.hidden && w.type !== 'credit' && w.id !== btn.dataset.pay))?.id || null,
       to: btn.dataset.pay,
       amount: Number(btn.dataset.owed),
       onDone: afterEntry(ctx),
