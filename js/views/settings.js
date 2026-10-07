@@ -1,6 +1,6 @@
 import { state, commit, replaceState, serialize, parseBackup } from '../store.js';
 import { openSheet } from '../sheet.js';
-import { generateRecurring, catMap, monthKey, localToday, shiftMonth, mergeBudget, movePayday } from '../budget.js';
+import { generateRecurring, catMap, monthKey, localToday, shiftMonth, mergeBudget, movePayday, JAR_DESC } from '../budget.js';
 import { fmt, parseAmount } from '../money.js';
 import { esc, uid, toast, downloadFile } from '../util.js';
 import { tr, setLang, getLang, locale } from '../i18n.js';
@@ -11,7 +11,6 @@ import { amountField, amountText, bindAmount, typeSwitch, bindTypeAndCats, walle
 // Danh sách bấm để sửa trong bảng có nhãn rõ ràng.
 
 const EVERY = { 1: 'Hằng tháng', 2: '2 tháng/lần', 3: '3 tháng/lần', 6: '6 tháng/lần', 12: 'Hằng năm' };
-export const JAR_DESC = { nec: 'chi tiêu cần thiết', play: 'chi cho bản thân', save: 'tiền để dành', invest: 'tiền đầu tư' };
 const ICONS = ['🍜', '🍱', '☕', '🧋', '🛒', '🛵', '🚗', '⛽', '🚌', '📱', '💡', '💧', '🏠', '👪', '💊', '🏥', '🎓', '📚', '👕', '🛍️',
   '💄', '✈️', '🎮', '🎬', '🎁', '🐶', '👶', '💳', '🏦', '🛟', '🪙', '📈', '💼', '🎉', '📊', '➕', '💰', '🧾', '🔧', '❤️'];
 const THEMES = [['light', 'Sáng'], ['dark', 'Tối'], ['auto', 'Tự động']];

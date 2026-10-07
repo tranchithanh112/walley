@@ -9,6 +9,8 @@ export const DEFAULT_JARS = [
   { id: 'play', name: 'Hưởng thụ', pct: 20, color: '#f5a524' },
 ];
 
+export const JAR_DESC = { nec: 'chi tiêu cần thiết', play: 'chi cho bản thân', save: 'tiền để dành', invest: 'tiền đầu tư' };
+
 // Hũ "tiêu dùng" (tiền thực sự mất đi). Tiết kiệm & Đầu tư là tiền để dành.
 export const SPEND_JARS = new Set(['nec', 'play']);
 

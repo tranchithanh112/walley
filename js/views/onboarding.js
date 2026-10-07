@@ -1,5 +1,5 @@
 import { state, commit } from '../store.js';
-import { generateRecurring, localToday } from '../budget.js';
+import { generateRecurring, localToday, JAR_DESC } from '../budget.js';
 import { periodOf } from '../period.js';
 import { walletIcon, walletBalance } from '../wallets.js';
 import { fmt, parseAmount } from '../money.js';
@@ -8,7 +8,6 @@ import { esc, toast } from '../util.js';
 import * as backup from '../backup.js';
 import { amountField, amountText, bindAmount, walletField, lastWallet } from './entry.js';
 import { openWallet } from './wallets.js';
-import { JAR_DESC } from './settings.js';
 
 // Lần đầu mở app: 4 bước (ngôn ngữ & tiền, lương, ví, chia thu nhập) vẽ thẳng vào trang, không dùng bảng.
 
