@@ -147,6 +147,9 @@ export function spendingBudget(S, p, today = localToday()) {
   return { budget, spent, left, status, daysLeft: dl, perDay: dl && left > 0 ? left / dl : null };
 }
 
+/** So sánh để sắp mới nhất trước: ngày, rồi lúc ghi. */
+export const byNewest = (x, y) => y.date.localeCompare(x.date) || (y.at ?? y.u ?? 0) - (x.at ?? x.u ?? 0);
+
 /** "Hôm nay", "Hôm qua", hoặc thứ + ngày/tháng. */
 export function dayLabel(date, today = localToday(), loc = 'vi-VN') {
   if (date === today) return 'Hôm nay';

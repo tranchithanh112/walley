@@ -1,6 +1,6 @@
 import { state, commit } from '../store.js';
 import { openSheet } from '../sheet.js';
-import { localToday, dayLabel, catMap } from '../budget.js';
+import { localToday, dayLabel, catMap, byNewest } from '../budget.js';
 import { WALLET_TYPES, walletIcon, walletBalance, setAnchor, netWorth, walletUsage } from '../wallets.js';
 import { fmt, parseAmount } from '../money.js';
 import { esc, uid, toast } from '../util.js';
@@ -47,7 +47,7 @@ function recentTxs(w) {
   const cats = catMap(state);
   const today = localToday();
   const list = state.txs.filter((t) => t.wallet === w.id || t.to === w.id)
-    .sort((x, y) => y.date.localeCompare(x.date) || (y.at ?? y.u ?? 0) - (x.at ?? x.u ?? 0))
+    .sort(byNewest)
     .slice(0, 20);
   if (!list.length) return '<p class="muted small">Chưa có giao dịch nào</p>';
   return `<div class="set-list">${list.map((t) => {

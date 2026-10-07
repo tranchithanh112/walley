@@ -1,5 +1,5 @@
 import { state } from '../store.js';
-import { periodSummary, spendingBudget, expectedIncome, catMap, dayLabel, localToday, SPEND_JARS } from '../budget.js';
+import { periodSummary, spendingBudget, expectedIncome, catMap, dayLabel, localToday, SPEND_JARS, byNewest } from '../budget.js';
 import { periodOf, shiftPeriod } from '../period.js';
 import { dueReminders } from '../wallets.js';
 import { fmt, decimals } from '../money.js';
@@ -42,7 +42,7 @@ export function renderHome(root, ctx) {
 
   const cats = catMap(state);
   const byDay = new Map();
-  for (const t of [...S.txs].sort((x, y) => y.date.localeCompare(x.date) || (y.at ?? y.u ?? 0) - (x.at ?? x.u ?? 0))) {
+  for (const t of [...S.txs].sort(byNewest)) {
     if (!byDay.has(t.date)) byDay.set(t.date, []);
     byDay.get(t.date).push(t);
   }
