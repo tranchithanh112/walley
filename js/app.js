@@ -3,7 +3,7 @@ import { generateRecurring, localToday } from './budget.js';
 import { setMoney } from './money.js';
 import { getLang, translateDom, setLang } from './i18n.js';
 import { icon } from './icons.js';
-import { toast, showFlash } from './util.js';
+import { toast } from './util.js';
 import * as backup from './backup.js';
 import { renderHome, openNewEntry } from './views/home.js';
 import { renderReport } from './views/report.js';
@@ -114,7 +114,6 @@ async function init() {
   document.getElementById('fab').onclick = () => openNewEntry(ctx);
   onCommit(scheduleBackup);
   render();
-  showFlash();
   autoSync();
   window.addEventListener('online', scheduleBackup);
   document.addEventListener('visibilitychange', () => {

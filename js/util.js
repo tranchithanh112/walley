@@ -1,8 +1,6 @@
 import { tr } from './i18n.js';
 import { icon } from './icons.js';
 
-export const $ = (s, r = document) => r.querySelector(s);
-export const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 export const uid = () => Math.random().toString(36).slice(2, 9) + Date.now().toString(36);
 
 export function esc(s) {
@@ -42,16 +40,6 @@ export function toast(msg, type = 'info', opts = {}) {
   box.appendChild(el);
   timer = setTimeout(close, ms ?? (action ? 6000 : type === 'error' ? 7000 : 4000));
   return el;
-}
-
-/** Thao tác kết thúc bằng tải lại trang: lưu thông báo tạm, hiện sau khi trang mở lại (showFlash). */
-export function flashAfterReload(msg, type = 'ok') {
-  try { sessionStorage.setItem('wl.flash', JSON.stringify([msg, type])); } catch { /* bỏ qua */ }
-}
-export function showFlash() {
-  let f = null;
-  try { f = JSON.parse(sessionStorage.getItem('wl.flash') || 'null'); sessionStorage.removeItem('wl.flash'); } catch { /* bỏ qua */ }
-  if (f) toast(f[0], f[1]);
 }
 
 export function downloadFile(name, text, type = 'application/json') {
