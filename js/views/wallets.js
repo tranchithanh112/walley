@@ -6,6 +6,7 @@ import { fmt, parseAmount } from '../money.js';
 import { esc, uid, toast } from '../util.js';
 import { locale, tr } from '../i18n.js';
 import { amountField, amountText, bindAmount, openEntry } from './entry.js';
+import { daySelect } from './ui.js';
 
 // Tab Ví: tổng tài sản, danh sách ví; bảng thêm / sửa ví (chốt số dư, ẩn, xóa) + giao dịch gần đây của ví.
 
@@ -81,7 +82,7 @@ export function openWallet(w, ctx) {
       <div class="field"><span class="w-bal-label">${balLabel(type0)}</span>
         ${amountField(editing ? amountText(Math.abs(balance0)) : '')}</div>
       <label class="field w-due" ${type0 === 'credit' ? '' : 'hidden'}><span>Ngày đến hạn thanh toán</span>
-        <select name="dueDay">${Array.from({ length: 31 }, (_, i) => `<option value="${i + 1}" ${i + 1 === dueDay0 ? 'selected' : ''}>Ngày ${i + 1}</option>`).join('')}</select></label>
+        ${daySelect('dueDay', dueDay0)}</label>
       <button class="btn primary big">${editing ? 'Lưu ví' : 'Thêm ví'}</button>
       ${action}
     </form>

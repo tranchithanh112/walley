@@ -8,6 +8,7 @@ import { esc, toast } from '../util.js';
 import * as backup from '../backup.js';
 import { amountField, amountText, bindAmount, walletField, lastWallet } from './entry.js';
 import { openWallet } from './wallets.js';
+import { daySelect, seg } from './ui.js';
 
 // Lần đầu mở app: 4 bước (ngôn ngữ & tiền, lương, ví, chia thu nhập) vẽ thẳng vào trang, không dùng bảng.
 
@@ -21,8 +22,6 @@ function defaultCurrency() {
   if (!curChosen && !state.txs.length) state.currency = getLang() === 'vi' ? 'VND' : 'USD';
 }
 
-const seg = (attr, items, cur) => `<div class="seg full">${items.map(([v, label]) =>
-  `<button type="button" data-${attr}="${v}" class="${v === cur ? 'on' : ''}" aria-pressed="${v === cur}">${label}</button>`).join('')}</div>`;
 
 export function renderOnboarding(root, ctx) {
   if (!curInit) { curInit = true; defaultCurrency(); }
@@ -111,8 +110,8 @@ export function renderOnboarding(root, ctx) {
 }
 
 function stepLang() {
-  return `<div class="field"><span>Ngôn ngữ</span>${seg('lang', [['vi', 'Tiếng Việt'], ['en', 'English']], getLang())}</div>
-    <div class="field"><span>Đơn vị tiền</span>${seg('cur', [['VND', 'VND'], ['USD', 'USD']], state.currency)}</div>
+  return `<div class="field"><span>Ngôn ngữ</span>${seg('lang', [['vi', 'Tiếng Việt'], ['en', 'English']], getLang(), 'full')}</div>
+    <div class="field"><span>Đơn vị tiền</span>${seg('cur', [['VND', 'VND'], ['USD', 'USD']], state.currency, 'full')}</div>
     ${backup.configured() ? '<button type="button" class="link" data-restore>Đã dùng Walley trên máy khác? Khôi phục từ Google Drive</button>' : ''}`;
 }
 
@@ -154,9 +153,7 @@ function bindLang(root, ctx) {
 
 function stepSalary() {
   const sal = state.recurring.find((r) => r.id === 'salary');
-  return `<label class="field"><span>Bạn nhận lương ngày mấy?</span><select name="payday">
-      ${Array.from({ length: 31 }, (_, i) => `<option value="${i + 1}" ${state.payday === i + 1 ? 'selected' : ''}>Ngày ${i + 1}</option>`).join('')}
-    </select></label>
+  return `<label class="field"><span>Bạn nhận lương ngày mấy?</span>${daySelect('payday', state.payday)}</label>
     <div class="field"><span>Lương mỗi tháng</span>${amountField(sal ? amountText(sal.amount) : '')}</div>
     ${walletField('wallet', 'Lương về ví nào', sal?.wallet || lastWallet())}`;
 }

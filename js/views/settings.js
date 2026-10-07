@@ -6,6 +6,7 @@ import { esc, uid, toast, downloadFile } from '../util.js';
 import { tr, setLang, getLang, locale } from '../i18n.js';
 import * as backup from '../backup.js';
 import { amountField, amountText, bindAmount, typeSwitch, bindTypeAndCats, walletField, lastWallet } from './entry.js';
+import { daySelect, seg } from './ui.js';
 
 // Tab Cài đặt: kỳ lương, sao lưu Google Drive, khoản tự động, chia thu nhập (tỷ lệ hũ), danh mục, giao diện, dữ liệu.
 // Danh sách bấm để sửa trong bảng có nhãn rõ ràng.
@@ -15,13 +16,10 @@ const ICONS = ['🍜', '🍱', '☕', '🧋', '🛒', '🛵', '🚗', '⛽', '�
   '💄', '✈️', '🎮', '🎬', '🎁', '🐶', '👶', '💳', '🏦', '🛟', '🪙', '📈', '💼', '🎉', '📊', '➕', '💰', '🧾', '🔧', '❤️'];
 const THEMES = [['light', 'Sáng'], ['dark', 'Tối'], ['auto', 'Tự động']];
 
-const days = (sel) => Array.from({ length: 31 }, (_, i) => `<option value="${i + 1}" ${sel === i + 1 ? 'selected' : ''}>Ngày ${i + 1}</option>`).join('');
 const monthLabel = (ym) => { const [y, m] = ym.split('-'); return `Tháng ${Number(m)}/${y}`; };
 const walletName = (id) => state.wallets.find((w) => w.id === id)?.name;
 const usage = (b, catId) => b.txs.filter((t) => t.cat === catId).length + b.recurring.filter((r) => r.cat === catId).length;
 const theme = () => { try { return localStorage.getItem('wl.theme') || 'auto'; } catch { return 'auto'; } };
-const seg = (attr, items, cur) => `<div class="seg">${items.map(([v, label]) =>
-  `<button type="button" data-${attr}="${v}" class="${v === cur ? 'on' : ''}" aria-pressed="${v === cur}">${label}</button>`).join('')}</div>`;
 
 export function renderSettings(body, ctx) {
   const b = state;
@@ -29,7 +27,7 @@ export function renderSettings(body, ctx) {
   body.innerHTML = `
     <div class="card">
       <h3>Kỳ lương</h3>
-      <label class="field"><span>Ngày nhận lương</span><select name="payday">${days(b.payday)}</select></label>
+      <label class="field"><span>Ngày nhận lương</span>${daySelect('payday', b.payday)}</label>
       <p class="muted small">Kỳ lương tính từ ngày này đến trước ngày nhận lương tháng sau.</p>
     </div>
 
@@ -244,7 +242,7 @@ function openRec(r, ctx) {
       ${amountField(r ? amountText(r.amount) : '', !editing)}
       <div class="entry-cats"></div>
       <div class="field-row">
-        <label class="field"><span>Vào ngày</span><select name="day">${days(Number(r?.day) || state.payday)}</select></label>
+        <label class="field"><span>Vào ngày</span>${daySelect('day', Number(r?.day) || state.payday)}</label>
         <label class="field"><span>Lặp lại</span><select name="every">
           ${Object.entries(EVERY).map(([k, v]) => `<option value="${k}" ${String(r?.every || 1) === k ? 'selected' : ''}>${v}</option>`).join('')}
         </select></label>
