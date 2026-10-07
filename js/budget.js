@@ -80,7 +80,7 @@ export function generateRecurring(b, today = localToday()) {
       const id = `rec:${r.id}:${ym}`;
       if (have.has(id) || b.deleted[id]) continue;
       const now = Date.now();
-      b.txs.push({ id, date, type: r.type, amount: Number(r.amount), cat: r.cat, note: r.note || '', wallet: r.wallet || null, at: now, u: now });
+      b.txs.push({ id, date, type: r.type, amount: Number(r.amount), cat: r.cat, note: r.note || '', wallet: r.wallet || null, to: null, at: now, u: now });
       have.add(id);
       n++;
     }

@@ -87,7 +87,10 @@ async function autoSync() {
   try {
     const r = await backup.syncNow();
     if (r === 'login') showLogin(true); else showSyncError(false);
-    if (r === 'pulled') render();
+    if (r === 'pulled') {
+      if (generateRecurring(state, localToday())) commit(); // dữ liệu kéo về có thể có khoản tự động mới
+      render();
+    }
   } catch (e) {
     console.warn('Walley auto-sync:', e);
     showSyncError(true);
@@ -111,7 +114,11 @@ async function init() {
   showFlash();
   autoSync();
   window.addEventListener('online', scheduleBackup);
-  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') autoSync(); });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') return;
+    if (generateRecurring(state, localToday())) { commit(); render(); } // app mở qua ngày mới
+    autoSync();
+  });
 }
 
 init();

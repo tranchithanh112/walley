@@ -61,6 +61,7 @@ test('generateRecurring: ngày 31 rơi vào cuối tháng ngắn, gắn ví', ()
   generateRecurring(b, '2026-03-31');
   assert.deepEqual(b.txs.map((t) => t.date), ['2026-01-31', '2026-02-28', '2026-03-31']);
   assert.equal(b.txs[0].wallet, 'bank');
+  assert.equal(b.txs[0].to, null);
   assert.equal(generateRecurring(b, '2026-03-31'), 0);
 });
 
