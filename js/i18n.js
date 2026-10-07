@@ -142,6 +142,28 @@ const EXACT = {
   'Ví này đang có giao dịch — chỉ ẩn được': 'This wallet has transactions — it can only be hidden',
   'Nhập tên ví': 'Enter a wallet name', 'Giao dịch gần đây': 'Recent transactions', 'Chưa có giao dịch nào': 'No transactions yet',
   'Không tìm thấy ví này — có thể vừa bị xóa trên máy khác': "Couldn't find this wallet — it may have just been deleted on another device",
+
+  // ---- tab cài đặt
+  'Kỳ lương': 'Pay period', 'Ngày nhận lương': 'Payday',
+  'Kỳ lương tính từ ngày này đến trước ngày nhận lương tháng sau.': "A pay period runs from this day to the day before next month's payday.",
+  'Sao lưu Google Drive': 'Google Drive backup', 'Bản này chưa bật sao lưu Google.': 'Google backup is not enabled in this build.',
+  'Sao lưu ngay': 'Back up now', 'chưa có': 'never', 'Đã kết nối và sao lưu': 'Connected and backed up', 'Đã sao lưu': 'Backed up',
+  'Đã cập nhật dữ liệu từ Google Drive': 'Updated data from Google Drive',
+  'Ngắt kết nối Google Drive? Dữ liệu trên máy vẫn giữ nguyên.': 'Disconnect Google Drive? Data on this device stays as it is.',
+  'Đơn vị tiền': 'Currency',
+  'Đổi đơn vị tiền chỉ đổi ký hiệu, không quy đổi số tiền đã ghi. Tiếp tục?':
+    'Changing the currency only changes the symbol — amounts already recorded are not converted. Continue?',
+  'Dữ liệu': 'Data', 'Xuất file': 'Export file', 'Nhập file': 'Import file', 'Đã xuất file': 'File exported', 'Đã nhập file': 'File imported',
+  'Nhập file sẽ gộp với dữ liệu đang có trên máy, không xóa gì.': 'Importing a file merges it with the data on this device — nothing is deleted.',
+  'Gộp dữ liệu trong file với dữ liệu trên máy này?': "Merge the file's data with the data on this device?",
+  'File không đúng định dạng của Walley': 'Not a Walley backup file', 'Chính sách quyền riêng tư': 'Privacy policy',
+  // sao lưu (backup.js)
+  'App chưa được cấu hình Google': 'The app is not set up for Google',
+  'Không tải được Google — kiểm tra mạng': "Couldn't load Google — check your connection",
+  'Hết thời gian chờ Google — thử lại': 'Google took too long — try again',
+  'Đã đóng cửa sổ Google': 'The Google window was closed', 'Không kết nối được Google': "Couldn't connect to Google",
+  'Cần cho phép Walley lưu vào Google Drive để sao lưu': 'Allow Walley to save to Google Drive to back up',
+  'Phiên Google đã hết hạn — bấm Sao lưu ngay': 'Google session expired — tap Back up now',
 };
 
 // Danh mục & hũ mặc định (xuất hiện chen trong chuỗi, vd "🍜 Ăn uống", "Hũ Thiết yếu").
@@ -215,6 +237,9 @@ const RULES = [
   [/^Không xóa được: còn (\d+) khoản dùng danh mục này$/, (m, n) =>
     `Can't delete: ${n} ${n === '1' ? 'entry still uses' : 'entries still use'} this category`],
   [/^Tổng (\d+)% — cần đúng 100%$/, 'Total $1% — must be exactly 100%'],
+  [/^Đã đổi ngày nhận lương thành ngày (\d+)$/, 'Payday changed to day $1'],
+  [/^Sao lưu lần cuối: (.+)$/, (m, v) => `Last backup: ${v === 'chưa có' ? 'never' : v}`],
+  [/^Google Drive lỗi (\d+)$/, 'Google Drive error $1'],
   [/^Đã khôi phục (.+)$/, 'Restored $1'],
   [/^Đã thêm (.+)$/, 'Added $1'],
   [/^Đã xóa (.+)$/, 'Deleted $1'],

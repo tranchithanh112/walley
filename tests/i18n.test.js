@@ -72,3 +72,23 @@ test('tab ví', () => {
   assert.equal(tr('Cần giữ ít nhất 1 ví'), 'Keep at least one wallet');
   assert.equal(tr('Ví này đang có giao dịch — chỉ ẩn được'), 'This wallet has transactions — it can only be hidden');
 });
+
+test('tab cài đặt', () => {
+  assert.equal(tr('Đã đổi ngày nhận lương thành ngày 10'), 'Payday changed to day 10');
+  assert.equal(tr('Sao lưu lần cuối: 10/7/2026, 9:00:00 AM'), 'Last backup: 10/7/2026, 9:00:00 AM');
+  assert.equal(tr('Sao lưu lần cuối: chưa có'), 'Last backup: never');
+  assert.equal(tr('chưa có'), 'never');
+  assert.equal(tr('Ngày nhận lương'), 'Payday');
+  assert.equal(tr('Kỳ lương'), 'Pay period');
+  assert.equal(tr('Bản này chưa bật sao lưu Google.'), 'Google backup is not enabled in this build.');
+  assert.equal(tr('Đã xuất file'), 'File exported');
+  assert.equal(tr('Đã nhập file'), 'File imported');
+  assert.equal(tr('Đơn vị tiền'), 'Currency');
+  assert.equal(tr('Chính sách quyền riêng tư'), 'Privacy policy');
+  assert.equal(tr('Google Drive lỗi 403'), 'Google Drive error 403');
+  assert.equal(tr('File không đúng định dạng của Walley'), 'Not a Walley backup file');
+  assert.equal(tr('Phiên Google đã hết hạn — bấm Sao lưu ngay'), 'Google session expired — tap Back up now');
+  assert.equal(tr('Đã lưu khoản tự động Lương · đã ghi 2 khoản đến hôm nay'), 'Recurring entry saved: Salary · 2 entries logged up to today');
+  assert.equal(tr('Tháng 10/2026'), 'Oct 2026');
+  assert.equal(tr('Hũ Thiết yếu'), 'Jar Essentials');
+});

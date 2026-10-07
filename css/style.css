@@ -253,6 +253,9 @@ input { min-width: 0; }
 .pct-input input { width: 78px; text-align: right; }
 .jar-total { margin: 0; font-weight: 650; color: var(--pos); }
 .jar-total.neg { color: var(--neg); }
+.set-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.set-group + .seg { margin-top: 8px; }
+.set-foot { text-align: center; margin: 8px 0 24px; }
 
 /* Bảng trượt (js/sheet.js): hộp giữa màn hình trên máy tính, trượt từ dưới lên trên điện thoại */
 body:has(dialog.sheet-dlg[open]) { overflow: hidden; }
