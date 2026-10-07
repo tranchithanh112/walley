@@ -31,8 +31,9 @@ export function walletField(name, label, sel) {
   const list = visibleWallets();
   const cur = state.wallets.find((w) => w.id === sel);
   if (cur?.hidden) list.push(cur); // khoản cũ gắn ví đã ẩn: vẫn hiện để không bị đổi ví khi sửa
+  const gone = sel && !cur ? `<option value="${esc(sel)}" selected>(ví đã xóa)</option>` : ''; // ví đã xóa: giữ nguyên khi sửa
   return `<label class="field"><span>${label}</span><select name="${name}">
-    ${list.map((w) => `<option value="${esc(w.id)}" ${w.id === sel ? 'selected' : ''}>${walletIcon(w.type)} ${esc(w.name)}</option>`).join('')}
+    ${list.map((w) => `<option value="${esc(w.id)}" ${w.id === sel ? 'selected' : ''}>${walletIcon(w.type)} ${esc(w.name)}</option>`).join('')}${gone}
   </select></label>`;
 }
 
