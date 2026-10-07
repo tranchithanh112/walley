@@ -89,6 +89,7 @@ export function openWallet(w, ctx) {
     onMount: (el, close) => {
       const form = el.querySelector('form');
       const amountInput = bindAmount(el);
+      const amount0 = amountInput.value; // chỉ chốt lại khi người dùng sửa ô số dư (thẻ dư có không bị đổi dấu)
       const label = el.querySelector('.w-bal-label');
       const due = el.querySelector('.w-due');
       form.querySelectorAll('[name="type"]').forEach((r) => {
@@ -122,9 +123,8 @@ export function openWallet(w, ctx) {
         if (editing) {
           const cur = state.wallets.find((x) => x.id === w.id);
           if (!cur) return toast('Không tìm thấy ví này — có thể vừa bị xóa trên máy khác', 'error');
-          const before = walletBalance(cur, state.txs).balance;
           Object.assign(cur, { name, type, dueDay });
-          if (amount !== before) setAnchor(cur, amount, Date.now(), localToday());
+          if (amountInput.value !== amount0) setAnchor(cur, amount, Date.now(), localToday());
         } else {
           const nw = { id: uid(), name, type, dueDay, hidden: false };
           setAnchor(nw, amount, Date.now(), localToday());
