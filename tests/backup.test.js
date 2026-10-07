@@ -28,7 +28,7 @@ test('reconcile: khác thứ tự khóa không tính là thay đổi', () => {
   assert.equal(r.remoteChanged, false);
 });
 
-test('reconcile: firstSync ? c?u h�nh Drive th?ng, giao d?ch v?n h?p nh?t', () => {
+test('reconcile: firstSync: cấu hình trên Drive thắng khi máy mới khôi phục', () => {
   const base = defaultData({ now: 1, today: '2026-10-01' });
   const local = { ...JSON.parse(JSON.stringify(base)), onboarded: true, configAt: 999, payday: 1 };
   local.txs.push({ id: 'l', date: '2026-10-03', type: 'expense', amount: 1, cat: 'food', u: 1 });

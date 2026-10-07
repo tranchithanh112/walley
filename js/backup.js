@@ -81,7 +81,7 @@ export function disconnect() {
   const t = session();
   if (t && window.google?.accounts?.oauth2) window.google.accounts.oauth2.revoke(t.token, () => {});
   sessionStorage.removeItem('wl.gtoken');
-  saveLoc({});
+  saveLoc({ last: loc().last });
 }
 
 async function token() {
@@ -148,7 +148,7 @@ async function doSync(interactive) {
   if (!connected()) return 'off';
   const s = session();
   if (!interactive && !(s && s.exp > Date.now())) return 'login';
-  const firstSync = !loc().last && !loc().fileId;
+  const firstSync = !loc().last;
   const text = await download();
   const remote = text ? parseBackup(text) : null;
   const { merged, localChanged, remoteChanged } = reconcile(state, remote, { firstSync });
