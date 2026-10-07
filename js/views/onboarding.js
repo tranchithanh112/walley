@@ -15,15 +15,18 @@ import { JAR_DESC } from './settings.js';
 const TITLES = ['Ngôn ngữ & đơn vị tiền', 'Lương của bạn', 'Ví của bạn', 'Chia thu nhập'];
 let step = 0;
 let curChosen = false; // người dùng đã tự chọn đơn vị tiền chưa (chưa → theo ngôn ngữ)
+let curInit = false; // đã đặt đơn vị tiền mặc định lần đầu chưa
+
+/** Chưa tự chọn và chưa có giao dịch → đơn vị tiền theo ngôn ngữ. Không lưu; lưu khi bấm Tiếp tục / chọn. */
+function defaultCurrency() {
+  if (!curChosen && !state.txs.length) state.currency = getLang() === 'vi' ? 'VND' : 'USD';
+}
 
 const seg = (attr, items, cur) => `<div class="seg full">${items.map(([v, label]) =>
   `<button type="button" data-${attr}="${v}" class="${v === cur ? 'on' : ''}" aria-pressed="${v === cur}">${label}</button>`).join('')}</div>`;
 
 export function renderOnboarding(root, ctx) {
-  if (step === 0 && !curChosen && !state.txs.length) {
-    const cur = getLang() === 'vi' ? 'VND' : 'USD';
-    if (state.currency !== cur) { state.currency = cur; commit(); }
-  }
+  if (!curInit) { curInit = true; defaultCurrency(); }
   const last = step === TITLES.length - 1;
   root.innerHTML = `<form class="ob" novalidate>
     <ol class="ob-dots" aria-label="Bước ${step + 1}/${TITLES.length}">${TITLES.map((_, i) => `<li class="${i === step ? 'on' : ''}"></li>`).join('')}</ol>
@@ -46,7 +49,10 @@ export function renderOnboarding(root, ctx) {
     ctx.go('home');
     toast('Xong! Bấm + để ghi khoản chi đầu tiên', 'ok');
   };
-  const next = () => (last ? finish() : goStep(step + 1));
+  const next = () => {
+    if (step === 0) commit(); // lưu ngôn ngữ / đơn vị tiền mặc định
+    return last ? finish() : goStep(step + 1);
+  };
   root.querySelector('[data-ob="back"]')?.addEventListener('click', () => goStep(step - 1));
   root.querySelector('[data-ob="skip"]').onclick = next;
 
@@ -118,7 +124,9 @@ function bindLang(root, ctx) {
       if (l === getLang()) return;
       setLang(l);
       const cash = state.wallets.find((w) => w.id === 'cash');
-      if (cash && ['Tiền mặt', 'Cash'].includes(cash.name)) { cash.name = l === 'en' ? 'Cash' : 'Tiền mặt'; commit(); }
+      if (cash && ['Tiền mặt', 'Cash'].includes(cash.name)) cash.name = l === 'en' ? 'Cash' : 'Tiền mặt';
+      defaultCurrency();
+      commit();
       ctx.rerender();
     };
   });
