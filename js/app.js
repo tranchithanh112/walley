@@ -89,7 +89,10 @@ async function autoSync() {
     if (r === 'login') showLogin(true); else showSyncError(false);
     if (r === 'pulled') {
       if (generateRecurring(state, localToday())) commit(); // dữ liệu kéo về có thể có khoản tự động mới
-      render();
+      // Đang gõ dở ô trong Cài đặt → không vẽ lại (mất chữ đang gõ); lần chuyển tab sau sẽ vẽ
+      const typing = tab === 'settings' && document.activeElement?.matches('input, textarea, select')
+        && document.getElementById('view').contains(document.activeElement);
+      if (!typing) render();
     }
   } catch (e) {
     console.warn('Walley auto-sync:', e);
