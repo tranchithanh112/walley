@@ -104,4 +104,8 @@ init();
 
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
   navigator.serviceWorker.register('sw.js').catch(() => {});
+  // App mở từ bản đã lưu; khi có bản mới thì báo để tải lại
+  navigator.serviceWorker.addEventListener('message', (e) => {
+    if (e.data === 'update-ready') toast('Có bản mới — tải lại để cập nhật', 'info', { ms: 15000, action: { label: 'Tải lại', run: () => location.reload() } });
+  });
 }

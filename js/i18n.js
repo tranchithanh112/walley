@@ -121,7 +121,7 @@ const EXACT = {
   'Đã lưu cài đặt': 'Settings saved', 'Đã nhập dữ liệu': 'Data imported',
   'Giao diện: theo hệ thống': 'Mode: follow system', 'Giao diện: sáng': 'Mode: light', 'Giao diện: tối': 'Mode: dark',
   'File JSON không đúng định dạng': 'Invalid JSON file', 'Chưa có Google Client ID': 'Missing Google Client ID',
-  'Đã có bản mới — chạm để cập nhật': 'A new version is available — tap to update',
+  'Có bản mới — tải lại để cập nhật': "There's a new version — reload to update", 'Tải lại': 'Reload',
 
   // thông báo thao tác
   'Hoàn tác': 'Undo', 'Đã hoàn tác': 'Undone', 'Nhập tên': 'Enter a name',
