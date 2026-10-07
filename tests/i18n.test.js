@@ -118,7 +118,7 @@ test('onboarding', () => {
   assert.equal(tr('Bạn nhận lương ngày mấy?'), 'Which day of the month do you get paid?');
   assert.equal(tr('Lương mỗi tháng'), 'Monthly salary');
   assert.equal(tr('Lương về ví nào'), 'Salary goes to');
-  assert.equal(tr('Nhập số dư hiện tại để app tự cộng / trừ khi bạn ghi thu chi.'), 'Enter current balances so the app can add / subtract as you record entries.');
+  assert.equal(tr('Nhập số dư hiện tại (đã gồm lương đã nhận) — app tự cộng / trừ khi bạn ghi thu chi.'), 'Enter the current balance (including salary already received) — the app adjusts it as you add entries.');
   assert.equal(tr('Tổng 90% — cần đúng 100%'), 'Total 90% — must be exactly 100%');
   assert.equal(tr('Xong! Bấm + để ghi khoản chi đầu tiên'), 'All set! Tap + to add your first expense');
 });

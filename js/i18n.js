@@ -179,7 +179,7 @@ const EXACT = {
   'Đã khôi phục dữ liệu': 'Data restored', 'Không tìm thấy bản sao lưu — hãy thiết lập mới': 'No backup found — set things up fresh',
   'Bạn nhận lương ngày mấy?': 'Which day of the month do you get paid?', 'Lương mỗi tháng': 'Monthly salary',
   'Lương về ví nào': 'Salary goes to',
-  'Nhập số dư hiện tại để app tự cộng / trừ khi bạn ghi thu chi.': 'Enter current balances so the app can add / subtract as you record entries.',
+  'Nhập số dư hiện tại (đã gồm lương đã nhận) — app tự cộng / trừ khi bạn ghi thu chi.': 'Enter the current balance (including salary already received) — the app adjusts it as you add entries.',
   'Xong! Bấm + để ghi khoản chi đầu tiên': 'All set! Tap + to add your first expense',
 };
 

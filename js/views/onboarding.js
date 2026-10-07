@@ -155,7 +155,7 @@ function stepSalary() {
 }
 
 function stepWallets() {
-  return `<p class="muted">Nhập số dư hiện tại để app tự cộng / trừ khi bạn ghi thu chi.</p>
+  return `<p class="muted">Nhập số dư hiện tại (đã gồm lương đã nhận) — app tự cộng / trừ khi bạn ghi thu chi.</p>
     <div class="set-list">${state.wallets.filter((w) => !w.hidden).map((w) => `<button type="button" class="set-row" data-w="${esc(w.id)}">
       <span class="bd-ic">${walletIcon(w.type)}</span>
       <span class="set-main"><b>${esc(w.name)}</b></span>
