@@ -1,0 +1,9 @@
+{
+  "name": "walley",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Walley — quản lý chi tiêu theo kỳ lương",
+  "scripts": { "dev": "node scripts/dev.js", "test": "node --test" },
+  "engines": { "node": ">=18" }
+}
