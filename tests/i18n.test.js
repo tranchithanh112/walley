@@ -95,3 +95,25 @@ test('tab cài đặt', () => {
     "Use the file's settings (wallets, categories, jars, payday, currency)? Choose Cancel to keep this device's settings.");
   assert.equal(tr('Đơn vị tiền trong file khác máy này — số tiền không được quy đổi'), "The file's currency differs from this device — amounts are not converted");
 });
+
+test('onboarding', () => {
+  assert.equal(tr('Walley giúp bạn biết còn tiêu được bao nhiêu tới kỳ lương sau.'), 'Walley shows you how much you can still spend until your next payday.');
+  assert.equal(tr('Bước 2/4'), 'Step 2 of 4');
+  assert.equal(tr('Ngôn ngữ & đơn vị tiền'), 'Language & currency');
+  assert.equal(tr('Lương của bạn'), 'Your salary');
+  assert.equal(tr('Ví của bạn'), 'Your wallets');
+  assert.equal(tr('Chia thu nhập'), 'Income split');
+  assert.equal(tr('Tiếp tục'), 'Continue');
+  assert.equal(tr('Bỏ qua'), 'Skip');
+  assert.equal(tr('Quay lại'), 'Back');
+  assert.equal(tr('Xong'), 'Done');
+  assert.equal(tr('Đã dùng Walley trên máy khác? Khôi phục từ Google Drive'), 'Used Walley on another device? Restore from Google Drive');
+  assert.equal(tr('Đã khôi phục dữ liệu'), 'Data restored');
+  assert.equal(tr('Không tìm thấy bản sao lưu — hãy thiết lập mới'), 'No backup found — set things up fresh');
+  assert.equal(tr('Bạn nhận lương ngày mấy?'), 'Which day of the month do you get paid?');
+  assert.equal(tr('Lương mỗi tháng'), 'Monthly salary');
+  assert.equal(tr('Lương về ví nào'), 'Salary goes to');
+  assert.equal(tr('Nhập số dư hiện tại để app tự cộng / trừ khi bạn ghi thu chi.'), 'Enter current balances so the app can add / subtract as you record entries.');
+  assert.equal(tr('Tổng 90% — cần đúng 100%'), 'Total 90% — must be exactly 100%');
+  assert.equal(tr('Xong! Bấm + để ghi khoản chi đầu tiên'), 'All set! Tap + to add your first expense');
+});

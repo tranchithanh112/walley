@@ -11,7 +11,7 @@ import { amountField, amountText, bindAmount, typeSwitch, bindTypeAndCats, walle
 // Danh sách bấm để sửa trong bảng có nhãn rõ ràng.
 
 const EVERY = { 1: 'Hằng tháng', 2: '2 tháng/lần', 3: '3 tháng/lần', 6: '6 tháng/lần', 12: 'Hằng năm' };
-const JAR_DESC = { nec: 'chi tiêu cần thiết', play: 'chi cho bản thân', save: 'tiền để dành', invest: 'tiền đầu tư' };
+export const JAR_DESC = { nec: 'chi tiêu cần thiết', play: 'chi cho bản thân', save: 'tiền để dành', invest: 'tiền đầu tư' };
 const ICONS = ['🍜', '🍱', '☕', '🧋', '🛒', '🛵', '🚗', '⛽', '🚌', '📱', '💡', '💧', '🏠', '👪', '💊', '🏥', '🎓', '📚', '👕', '🛍️',
   '💄', '✈️', '🎮', '🎬', '🎁', '🐶', '👶', '💳', '🏦', '🛟', '🪙', '📈', '💼', '🎉', '📊', '➕', '💰', '🧾', '🔧', '❤️'];
 const THEMES = [['light', 'Sáng'], ['dark', 'Tối'], ['auto', 'Tự động']];

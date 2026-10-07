@@ -167,6 +167,17 @@ const EXACT = {
   'Đã đóng cửa sổ Google': 'The Google window was closed', 'Không kết nối được Google': "Couldn't connect to Google",
   'Cần cho phép Walley lưu vào Google Drive để sao lưu': 'Allow Walley to save to Google Drive to back up',
   'Phiên Google đã hết hạn — bấm Sao lưu ngay': 'Google session expired — tap Back up now',
+
+  // ---- lần đầu mở app (onboarding)
+  'Walley giúp bạn biết còn tiêu được bao nhiêu tới kỳ lương sau.': 'Walley shows you how much you can still spend until your next payday.',
+  'Ngôn ngữ & đơn vị tiền': 'Language & currency', 'Lương của bạn': 'Your salary',
+  'Tiếp tục': 'Continue', 'Bỏ qua': 'Skip', 'Quay lại': 'Back', 'Xong': 'Done',
+  'Đã dùng Walley trên máy khác? Khôi phục từ Google Drive': 'Used Walley on another device? Restore from Google Drive',
+  'Đã khôi phục dữ liệu': 'Data restored', 'Không tìm thấy bản sao lưu — hãy thiết lập mới': 'No backup found — set things up fresh',
+  'Bạn nhận lương ngày mấy?': 'Which day of the month do you get paid?', 'Lương mỗi tháng': 'Monthly salary',
+  'Lương về ví nào': 'Salary goes to',
+  'Nhập số dư hiện tại để app tự cộng / trừ khi bạn ghi thu chi.': 'Enter current balances so the app can add / subtract as you record entries.',
+  'Xong! Bấm + để ghi khoản chi đầu tiên': 'All set! Tap + to add your first expense',
 };
 
 // Danh mục & hũ mặc định (xuất hiện chen trong chuỗi, vd "🍜 Ăn uống", "Hũ Thiết yếu").
@@ -241,6 +252,7 @@ const RULES = [
     `Can't delete: ${n} ${n === '1' ? 'entry still uses' : 'entries still use'} this category`],
   [/^Tổng (\d+)% — cần đúng 100%$/, 'Total $1% — must be exactly 100%'],
   [/^Đã đổi ngày nhận lương thành ngày (\d+)$/, 'Payday changed to day $1'],
+  [/^Bước (\d+)\/(\d+)$/, 'Step $1 of $2'],
   [/^Sao lưu lần cuối: (.+)$/, (m, v) => `Last backup: ${v === 'chưa có' ? 'never' : v}`],
   [/^Google Drive lỗi (\d+)$/, 'Google Drive error $1'],
   [/^Đã khôi phục (.+)$/, 'Restored $1'],

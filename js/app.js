@@ -9,6 +9,7 @@ import { renderHome, openNewEntry } from './views/home.js';
 import { renderReport } from './views/report.js';
 import { renderWallets } from './views/wallets.js';
 import { renderSettings } from './views/settings.js';
+import { renderOnboarding } from './views/onboarding.js';
 
 const TABS = [
   ['home', 'Trang chủ', 'home'],
@@ -27,6 +28,7 @@ registerView('home', renderHome);
 registerView('report', renderReport);
 registerView('wallets', renderWallets);
 registerView('settings', renderSettings);
+registerOnboarding(renderOnboarding);
 
 function go(t) {
   tab = t;

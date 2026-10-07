@@ -321,6 +321,17 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
 .radio-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; cursor: pointer; }
 .radio-row input { width: 18px; height: 18px; flex: none; accent-color: var(--accent); }
 
+/* ================= Lần đầu mở app ================= */
+.ob { display: grid; gap: 18px; max-width: 420px; margin: 24px auto 0; }
+.ob h2 { margin: 0; font-size: 22px; }
+.ob-intro { margin: 0; font-size: 17px; font-weight: 600; }
+.ob-dots { list-style: none; display: flex; justify-content: center; gap: 8px; margin: 0; padding: 0; }
+.ob-dots li { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+.ob-dots li.on { background: var(--accent); width: 22px; border-radius: 4px; }
+.ob > .link, .ob > .btn { justify-self: start; }
+.ob-nav { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.ob-nav .btn.primary { margin-left: auto; min-width: 120px; }
+
 /* ================= Toasts ================= */
 /* nằm trên nút + và thanh điều hướng dưới, trong cột 560px */
 #toasts {
