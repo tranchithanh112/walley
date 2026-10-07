@@ -25,9 +25,19 @@ function stable(v) {
   return JSON.stringify(v);
 }
 
-/** Gộp dữ liệu máy này với bản trên Drive; cho biết bên nào cần ghi lại. */
-export function reconcile(local, remote) {
-  const merged = mergeBudget(JSON.parse(JSON.stringify(local)), remote);
+const withTimeout = (p, ms, msg) => new Promise((resolve, reject) => {
+  const t = setTimeout(() => reject(new Error(msg)), ms);
+  p.then(resolve, reject).finally(() => clearTimeout(t));
+});
+
+/**
+ * Gộp dữ liệu máy này với bản trên Drive; cho biết bên nào cần ghi lại.
+ * firstSync: máy chưa từng đồng bộ → cấu hình trên Drive thắng (khôi phục), giao dịch vẫn hợp nhất.
+ */
+export function reconcile(local, remote, { firstSync = false } = {}) {
+  const base = JSON.parse(JSON.stringify(local));
+  if (firstSync && remote) base.configAt = -1; // ponytail: -1 để cấu hình remote thắng cả khi configAt hòa
+  const merged = mergeBudget(base, remote);
   const text = stable(merged);
   return { merged, localChanged: text !== stable(local), remoteChanged: !remote || text !== stable(remote) };
 }
@@ -38,10 +48,10 @@ function loadGis() {
     const s = document.createElement('script');
     s.src = 'https://accounts.google.com/gsi/client';
     s.onload = resolve;
-    s.onerror = () => { gis = null; reject(new Error('Không tải được Google — kiểm tra mạng')); };
+    s.onerror = () => reject(new Error('Không tải được Google — kiểm tra mạng'));
     document.head.appendChild(s);
   });
-  return gis;
+  return withTimeout(gis, 20000, 'Không tải được Google — kiểm tra mạng').catch((e) => { gis = null; throw e; });
 }
 
 const session = () => { try { return JSON.parse(sessionStorage.getItem('wl.gtoken') || 'null'); } catch { return null; } };
@@ -50,19 +60,20 @@ const session = () => { try { return JSON.parse(sessionStorage.getItem('wl.gtoke
 export async function connect(interactive = true) {
   if (!configured()) throw new Error('App chưa được cấu hình Google');
   await loadGis();
-  await new Promise((resolve, reject) => {
+  await withTimeout(new Promise((resolve, reject) => {
     const client = window.google.accounts.oauth2.initTokenClient({
       client_id: GOOGLE_CLIENT_ID,
       scope: SCOPE,
       callback: (r) => {
         if (r.error) return reject(new Error(r.error_description || r.error));
+        if (!window.google.accounts.oauth2.hasGrantedAllScopes?.(r, SCOPE)) return reject(new Error('Cần cho phép Walley lưu vào Google Drive để sao lưu'));
         sessionStorage.setItem('wl.gtoken', JSON.stringify({ token: r.access_token, exp: Date.now() + (r.expires_in - 60) * 1000 }));
         resolve();
       },
       error_callback: (e) => reject(new Error(e?.type === 'popup_closed' ? 'Đã đóng cửa sổ Google' : 'Không kết nối được Google')),
     });
     client.requestAccessToken({ prompt: interactive ? 'consent' : '' });
-  });
+  }), 120000, 'Hết thời gian chờ Google — thử lại');
   saveLoc({ ...loc(), connected: true });
 }
 
@@ -92,7 +103,7 @@ async function fileId() {
   const l = loc();
   if (l.fileId) return l.fileId;
   const q = encodeURIComponent(`name='${FILE}'`);
-  const r = await api(`https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=${q}&fields=files(id)`);
+  const r = await api(`https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=${q}&fields=files(id)&orderBy=createdTime`);
   const id = (await r.json()).files?.[0]?.id || null;
   if (id) saveLoc({ ...loc(), fileId: id });
   return id;
@@ -122,18 +133,25 @@ async function upload(text) {
 }
 
 let queue = Promise.resolve();
-/** Tải bản trên Drive, gộp với máy này, ghi lại bên nào thiếu. Xếp hàng, không chạy chồng. */
-export function syncNow() {
-  const run = queue.then(doSync, doSync);
+/**
+ * Tải bản trên Drive, gộp với máy này, ghi lại bên nào thiếu. Xếp hàng, không chạy chồng.
+ * interactive = true chỉ khi người dùng vừa bấm nút. Trả về 'off' | 'login' | 'pulled' | 'pushed' | 'same'.
+ */
+export function syncNow(interactive = false) {
+  const go = () => doSync(interactive);
+  const run = queue.then(go, go);
   queue = run.catch(() => {});
   return run;
 }
 
-async function doSync() {
+async function doSync(interactive) {
   if (!connected()) return 'off';
+  const s = session();
+  if (!interactive && !(s && s.exp > Date.now())) return 'login';
+  const firstSync = !loc().last && !loc().fileId;
   const text = await download();
   const remote = text ? parseBackup(text) : null;
-  const { merged, localChanged, remoteChanged } = reconcile(state, remote);
+  const { merged, localChanged, remoteChanged } = reconcile(state, remote, { firstSync });
   if (localChanged) replaceState(merged);
   if (remoteChanged) await upload(serialize(merged));
   saveLoc({ ...loc(), last: Date.now() });
