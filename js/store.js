@@ -10,7 +10,13 @@ const listeners = new Set();
 /** Ghép dữ liệu đọc được lên bộ mặc định: thiếu trường thì thêm, có rồi giữ nguyên. */
 export function normalize(obj) {
   const d = { ...defaultData(), ...(obj || {}) };
-  for (const k of ['jars', 'categories', 'recurring', 'wallets', 'txs']) if (!Array.isArray(d[k])) d[k] = defaultData()[k];
+  for (const k of ['jars', 'categories', 'recurring', 'wallets', 'txs']) {
+    if (!Array.isArray(d[k])) d[k] = defaultData()[k];
+    d[k] = d[k].filter((x) => x && typeof x === 'object' && !Array.isArray(x));
+  }
+  for (const k of ['wallets', 'categories']) d[k] = d[k].filter((x) => typeof x.id === 'string');
+  d.txs = d.txs.filter((t) => typeof t.id === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(t.date)
+    && ['expense', 'income', 'transfer'].includes(t.type) && Number.isFinite(t.amount) && t.amount > 0);
   if (!d.deleted || typeof d.deleted !== 'object') d.deleted = {};
   d.payday = Math.min(31, Math.max(1, Math.trunc(Number(d.payday)) || 1));
   d.currency = d.currency === 'USD' ? 'USD' : 'VND';
