@@ -130,6 +130,17 @@ const EXACT = {
   'File không phải JSON hợp lệ': 'The file is not valid JSON',
   'Đã xóa toàn bộ dữ liệu trên máy này': 'All data on this device deleted',
   'Đã khôi phục giao dịch': 'Transaction restored',
+
+  // ---- ví
+  'Tổng tài sản': 'Net worth', 'Đã trừ số đang nợ thẻ tín dụng': 'Credit card debt subtracted',
+  'Ví của bạn': 'Your wallets', '+ Thêm ví': '+ Add wallet', 'Thêm ví': 'Add wallet', 'Sửa ví': 'Edit wallet',
+  'Tên ví': 'Wallet name', 'Tiền mặt': 'Cash', 'Ngân hàng': 'Bank', 'Ví điện tử': 'E-wallet', 'Thẻ tín dụng': 'Credit card',
+  'Số dư hiện tại': 'Current balance', 'Số đang nợ': 'Amount owed', 'Ngày đến hạn thanh toán': 'Payment due day',
+  'Số dư thực tế hôm nay (xem trong app ngân hàng)': "Today's actual balance (check your banking app)",
+  'Xóa ví': 'Delete wallet', 'Ẩn ví': 'Hide wallet', 'Hiện lại ví': 'Unhide wallet', 'Lưu ví': 'Save wallet',
+  'Cần giữ ít nhất 1 ví': 'Keep at least one wallet', 'Đã có ví tên này': 'A wallet with this name already exists',
+  'Nhập tên ví': 'Enter a wallet name', 'Giao dịch gần đây': 'Recent transactions', 'Chưa có giao dịch nào': 'No transactions yet',
+  'Không tìm thấy ví này — có thể vừa bị xóa trên máy khác': "Couldn't find this wallet — it may have just been deleted on another device",
 };
 
 // Danh mục & hũ mặc định (xuất hiện chen trong chuỗi, vd "🍜 Ăn uống", "Hũ Thiết yếu").
@@ -195,6 +206,9 @@ const RULES = [
   [/^Đã chuyển (.+) · (.+) → (.+)$/, 'Transferred $1 · $2 → $3'],
   [/^Đã lưu khoản tự động (.+?)(?: · đã ghi (\d+) khoản đến hôm nay)?$/, (m, name, n) =>
     `Recurring entry saved: ${name}` + (n ? ` · ${n} ${n === '1' ? 'entry' : 'entries'} logged up to today` : '')],
+  [/^Ví đã ẩn \((\d+)\)$/, 'Hidden wallets ($1)'],
+  [/^Đã (lưu|thêm|xóa|ẩn|khôi phục) ví (.+)$/, (m, v, n) =>
+    `Wallet ${{ 'lưu': 'saved', 'thêm': 'added', 'xóa': 'deleted', 'ẩn': 'hidden', 'khôi phục': 'restored' }[v]}: ${n}`],
   [/^Đã (lưu|thêm|xóa|khôi phục) danh mục (.+)$/, (m, v, n) =>
     `Category ${{ 'lưu': 'saved', 'thêm': 'added', 'xóa': 'deleted', 'khôi phục': 'restored' }[v]}: ${n}`],
   [/^Không xóa được: còn (\d+) khoản dùng danh mục này$/, (m, n) =>

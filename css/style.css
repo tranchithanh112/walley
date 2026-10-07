@@ -308,7 +308,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
 .field-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
 .field input:not([type=radio]), .field select { width: 100%; min-height: 46px; }
 .field input.invalid { border-color: var(--neg); }
-.entry > .link.danger { justify-self: center; padding: 10px 16px; }
+.entry > .link { justify-self: center; padding: 10px 16px; }
 .icon-grid { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 4px; }
 .icon-grid button {
   aspect-ratio: 1; padding: 0; font-size: 22px; border-radius: 10px; border: 2px solid transparent;

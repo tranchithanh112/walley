@@ -57,3 +57,17 @@ test('tiếng Việt giữ nguyên', () => {
   assert.equal(tr('Cài đặt'), 'Cài đặt');
   setLang('en');
 });
+
+test('tab ví', () => {
+  assert.equal(tr('Tổng tài sản'), 'Net worth');
+  assert.equal(tr('Thẻ tín dụng'), 'Credit card');
+  assert.equal(tr('Số dư thực tế hôm nay (xem trong app ngân hàng)'), "Today's actual balance (check your banking app)");
+  assert.equal(tr('Ví đã ẩn (2)'), 'Hidden wallets (2)');
+  assert.equal(tr('Đã thêm ví Techcombank'), 'Wallet added: Techcombank');
+  assert.equal(tr('Đã lưu ví Thẻ VIB'), 'Wallet saved: Thẻ VIB');
+  assert.equal(tr('Đã xóa ví Momo'), 'Wallet deleted: Momo');
+  assert.equal(tr('Đã ẩn ví Momo'), 'Wallet hidden: Momo');
+  assert.equal(tr('Đã khôi phục ví Momo'), 'Wallet restored: Momo');
+  assert.equal(tr('Ngày 15'), 'Day 15');
+  assert.equal(tr('Cần giữ ít nhất 1 ví'), 'Keep at least one wallet');
+});
