@@ -135,7 +135,7 @@ function jarsList(S) {
     return `<li>
       <span class="bd-jar-name">${esc(j.name)}</span>
       <span class="bd-jar-note ${over ? 'neg' : ''}">${note}</span>
-      <span class="bar"><i style="width:${pct.toFixed(1)}%;background:${over ? 'var(--neg)' : esc(j.color)}"></i></span>
+      <span class="bar"><i style="width:${pct.toFixed(1)}%;background:${over ? 'var(--neg)' : /^#[0-9a-fA-F]{3,8}$/.test(j.color) ? j.color : 'var(--accent)'}"></i></span>
     </li>`;
   }).join('')}</ul>`;
 }
