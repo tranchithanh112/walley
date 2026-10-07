@@ -42,13 +42,15 @@ function render() {
   const root = document.getElementById('view');
   const nav = document.getElementById('nav');
   const fab = document.getElementById('fab');
+  const tabs = document.getElementById('tabs');
   const first = !state.onboarded && onboarding;
-  nav.hidden = fab.hidden = Boolean(first);
+  nav.hidden = fab.hidden = document.getElementById('topbar').hidden = Boolean(first);
   if (first) onboarding(root, ctx);
   else (VIEWS[tab] || ((r) => { r.innerHTML = '<p>Walley</p>'; }))(root, ctx);
-  nav.innerHTML = TABS.map(([id, label, ic]) =>
+  // cùng các nút cho thanh dưới (điện thoại) và thanh tab trên cùng (máy tính) — CSS chọn cái nào hiện
+  nav.innerHTML = tabs.innerHTML = TABS.map(([id, label, ic]) =>
     `<button type="button" data-tab="${id}" class="${id === tab ? 'on' : ''}" aria-current="${id === tab ? 'page' : 'false'}">${icon(ic)}<span>${label}</span></button>`).join('');
-  nav.querySelectorAll('[data-tab]').forEach((b) => { b.onclick = () => go(b.dataset.tab); });
+  document.querySelectorAll('#nav [data-tab], #tabs [data-tab]').forEach((b) => { b.onclick = () => go(b.dataset.tab); });
   translateDom(document.body);
 }
 
@@ -112,6 +114,8 @@ async function init() {
   if (generateRecurring(state, localToday())) commit();
   document.getElementById('fab').innerHTML = icon('plus');
   document.getElementById('fab').onclick = () => openNewEntry(ctx);
+  document.getElementById('top-new').innerHTML = `${icon('plus')}<span>Ghi khoản</span>`;
+  document.getElementById('top-new').onclick = () => openNewEntry(ctx);
   onCommit(scheduleBackup);
   render();
   autoSync();

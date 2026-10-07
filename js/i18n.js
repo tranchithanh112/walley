@@ -43,7 +43,7 @@ const EXACT = {
   'Chọn danh mục': 'Pick a category', 'Nhập số tiền hợp lệ': 'Enter a valid amount',
 
   // thu chi (giao diện mới)
-  'Ghi khoản mới': 'New entry',
+  'Ghi khoản mới': 'New entry', 'Ghi khoản': 'Add entry',
   'Ghi khoản đầu tiên': 'Add your first entry', 'Ghi khoản thu': 'Add income',
   'Thu vào': 'Income', 'Tiêu': 'Spent', 'Để dành': 'Saved', 'Hôm qua': 'Yesterday',
   'Còn tiêu được': 'Left to spend', 'Còn lại': 'Left over',
