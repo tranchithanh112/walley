@@ -6,6 +6,7 @@ import { icon } from './icons.js';
 import { toast, showFlash } from './util.js';
 import * as backup from './backup.js';
 import { renderHome, openNewEntry } from './views/home.js';
+import { renderReport } from './views/report.js';
 
 const TABS = [
   ['home', 'Trang chủ', 'home'],
@@ -21,6 +22,7 @@ export const ctx = { rerender: () => render(), go: (t) => go(t) };
 export const registerView = (id, fn) => { VIEWS[id] = fn; };
 export const registerOnboarding = (fn) => { onboarding = fn; };
 registerView('home', renderHome);
+registerView('report', renderReport);
 
 function go(t) {
   tab = t;

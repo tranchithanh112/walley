@@ -86,6 +86,8 @@ const EXACT = {
   'Lưu khoản chuyển': 'Save transfer', 'Sửa khoản chuyển': 'Edit transfer',
   'Đã cập nhật khoản chuyển': 'Transfer updated', 'Đã khôi phục khoản chuyển': 'Transfer restored',
   'Cần ít nhất 2 ví để chuyển tiền — thêm ví ở tab Ví': 'You need at least 2 wallets to transfer — add one in the Wallet tab',
+  '6 kỳ gần nhất': 'Last 6 periods', 'Chưa có khoản tiêu nào trong kỳ.': 'No spending this period.',
+  'Chưa có khoản để dành nào trong kỳ.': 'Nothing saved this period.',
   'Tiêu vào đâu': 'Where your money went', 'Chưa có khoản tiêu nào trong tháng.': 'No spending this month.',
   'Chưa có khoản để dành nào trong tháng.': 'Nothing saved or invested this month.',
   'Khoản tự động hằng tháng': 'Recurring entries', '+ Thêm': '+ Add', 'Chưa có khoản tự động nào.': 'No recurring entries yet.',
@@ -182,6 +184,8 @@ const RULES = [
   [/^Kỳ lương (.+)$/, 'Pay period $1'],
   [/^Còn (\d+) ngày tới lương$/, (m, n) => `${n} ${n === '1' ? 'day' : 'days'} to payday`],
   [/^Còn (\d+) ngày tới hạn$/, (m, n) => `Due in ${n} ${n === '1' ? 'day' : 'days'}`],
+  [/^Kỳ này bạn giữ lại được (\d+)% thu nhập\.$/, 'This period you kept $1% of your income.'],
+  [/^Kỳ này bạn tiêu nhiều hơn thu nhập (.+)\.$/, 'This period you spent $1 more than you earned.'],
   [/^Tháng này bạn giữ lại được (\d+)% thu nhập\.$/, 'This month you kept $1% of your income.'],
   [/^Tháng này bạn tiêu nhiều hơn thu nhập (.+)\.$/, 'This month you spent $1 more than you earned.'],
   [/^Ngày (\d+)(?: · (Hằng tháng|Hằng năm|(\d+) tháng\/lần))?( · .+)?$/, (m, d, e, n, rest = '') =>

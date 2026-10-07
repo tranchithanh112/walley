@@ -39,6 +39,19 @@ test('trang chủ theo kỳ lương', () => {
   assert.equal(tr('vượt $50'), 'over by $50');
 });
 
+test('báo cáo theo kỳ', () => {
+  assert.equal(tr('Kỳ này bạn giữ lại được 25% thu nhập.'), 'This period you kept 25% of your income.');
+  assert.equal(tr('Kỳ này bạn tiêu nhiều hơn thu nhập $50.'), 'This period you spent $50 more than you earned.');
+  assert.equal(tr('6 kỳ gần nhất'), 'Last 6 periods');
+  assert.equal(tr('Chưa có khoản tiêu nào trong kỳ.'), 'No spending this period.');
+  assert.equal(tr('Chưa có khoản để dành nào trong kỳ.'), 'Nothing saved this period.');
+  assert.equal(tr('Tiêu vào đâu'), 'Where your money went');
+  assert.equal(tr('Để dành & đầu tư'), 'Saved & invested');
+  assert.equal(tr('Thu vào'), 'Income');
+  assert.equal(tr('Tiêu'), 'Spent');
+  assert.equal(tr('Để dành'), 'Saved');
+});
+
 test('tiếng Việt giữ nguyên', () => {
   setLang('vi');
   assert.equal(tr('Cài đặt'), 'Cài đặt');
