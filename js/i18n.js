@@ -139,6 +139,7 @@ const EXACT = {
   'Số dư thực tế hôm nay (xem trong app ngân hàng)': "Today's actual balance (check your banking app)",
   'Xóa ví': 'Delete wallet', 'Ẩn ví': 'Hide wallet', 'Hiện lại ví': 'Unhide wallet', 'Lưu ví': 'Save wallet',
   'Cần giữ ít nhất 1 ví': 'Keep at least one wallet', 'Đã có ví tên này': 'A wallet with this name already exists',
+  'Ví này đang có giao dịch — chỉ ẩn được': 'This wallet has transactions — it can only be hidden',
   'Nhập tên ví': 'Enter a wallet name', 'Giao dịch gần đây': 'Recent transactions', 'Chưa có giao dịch nào': 'No transactions yet',
   'Không tìm thấy ví này — có thể vừa bị xóa trên máy khác': "Couldn't find this wallet — it may have just been deleted on another device",
 };

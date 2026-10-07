@@ -123,8 +123,9 @@ export function openWallet(w, ctx) {
         if (editing) {
           const cur = state.wallets.find((x) => x.id === w.id);
           if (!cur) return toast('Không tìm thấy ví này — có thể vừa bị xóa trên máy khác', 'error');
+          const flip = (cur.type === 'credit') !== (type === 'credit'); // đổi dấu lưu trữ → chốt lại theo số đang hiện
           Object.assign(cur, { name, type, dueDay });
-          if (amountInput.value !== amount0) setAnchor(cur, amount, Date.now(), localToday());
+          if (flip || amountInput.value !== amount0) setAnchor(cur, amount, Date.now(), localToday());
         } else {
           const nw = { id: uid(), name, type, dueDay, hidden: false };
           setAnchor(nw, amount, Date.now(), localToday());
@@ -160,6 +161,7 @@ export function openWallet(w, ctx) {
         const i = state.wallets.findIndex((x) => x.id === w.id);
         if (i < 0) return;
         const cur = state.wallets[i];
+        if (walletUsage(state, cur.id) > 0) return toast('Ví này đang có giao dịch — chỉ ẩn được', 'error');
         if (!cur.hidden && visibleCount() <= 1) return toast('Cần giữ ít nhất 1 ví', 'error');
         state.wallets.splice(i, 1);
         commit({ config: true });

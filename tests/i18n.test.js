@@ -70,4 +70,5 @@ test('tab ví', () => {
   assert.equal(tr('Đã khôi phục ví Momo'), 'Wallet restored: Momo');
   assert.equal(tr('Ngày 15'), 'Day 15');
   assert.equal(tr('Cần giữ ít nhất 1 ví'), 'Keep at least one wallet');
+  assert.equal(tr('Ví này đang có giao dịch — chỉ ẩn được'), 'This wallet has transactions — it can only be hidden');
 });
