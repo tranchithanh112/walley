@@ -5,6 +5,7 @@ import { getLang, translateDom, setLang } from './i18n.js';
 import { icon } from './icons.js';
 import { toast, showFlash } from './util.js';
 import * as backup from './backup.js';
+import { renderHome, openNewEntry } from './views/home.js';
 
 const TABS = [
   ['home', 'Trang chủ', 'home'],
@@ -19,6 +20,7 @@ let tab = TABS.some(([id]) => id === location.hash.slice(1)) ? location.hash.sli
 export const ctx = { rerender: () => render(), go: (t) => go(t) };
 export const registerView = (id, fn) => { VIEWS[id] = fn; };
 export const registerOnboarding = (fn) => { onboarding = fn; };
+registerView('home', renderHome);
 
 function go(t) {
   tab = t;
@@ -81,7 +83,7 @@ async function init() {
   window.addEventListener('wl:save-failed', () => toast('Không lưu được dữ liệu trên máy — bộ nhớ đầy?', 'error'));
   if (generateRecurring(state, localToday())) commit();
   document.getElementById('fab').innerHTML = icon('plus');
-  document.getElementById('fab').onclick = () => import('./views/entry.js').then((m) => m.openEntry({ onDone: ctx.rerender }));
+  document.getElementById('fab').onclick = () => openNewEntry(ctx);
   onCommit(scheduleBackup);
   render();
   showFlash();
