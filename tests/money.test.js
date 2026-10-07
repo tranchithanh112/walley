@@ -83,4 +83,9 @@ test('ô số tiền: nhóm nghìn, phím nhanh', () => {
   assert.equal(applyAmountKey('12', 'dot'), '12.');
   assert.equal(applyAmountKey('12.5', 'dot'), '12.5');
   assert.deepEqual(amountKeys(), [['dot', '.'], ['000', '000']]);
+  assert.equal(applyAmountKey('1,250', '000'), '1250000');
+  assert.equal(parseAmount('1250000'), 1250000);
+  assert.equal(applyAmountKey('12.5', '000'), '12.5');
+  setMoney({ currency: 'USD', lang: 'vi' });
+  assert.equal(applyAmountKey('1.250', '000'), '1250000');
 });

@@ -73,6 +73,7 @@ export function applyAmountKey(s, key) {
   if (key === 'dot') return raw.includes(decSep()) ? raw : (raw || '0') + decSep();
   if (!raw) return '';
   const isGrouped = grouped(raw, sep);
+  if (key === '000' && st.currency === 'USD') return raw.includes(decSep()) ? raw : raw.split(sep).join('') + '000';
   if (key === '000') return isGrouped ? formatAmountInput(raw + '000') : raw;
   const n = isGrouped ? Number(raw.split(sep).join('')) : Number(raw.replace(',', '.'));
   if (!(n > 0)) return raw;
