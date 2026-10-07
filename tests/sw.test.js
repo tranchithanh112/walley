@@ -26,7 +26,7 @@ test('CSP connect-src cho phép mọi domain mà service worker tự tải (SW c
 });
 
 /** Chạy sw.js với cache / mạng giả. */
-function loadSw({ online, cached = {} }) {
+function loadSw({ online, cached = {}, posted = [] }) {
   const listeners = {};
   const store = new Map(Object.entries(cached).map(([u, body]) => [u, new Response(body, { headers: { 'content-type': 'text/html' } })]));
   const cache = {
@@ -41,7 +41,7 @@ function loadSw({ online, cached = {} }) {
   const ctx = {
     self: {
       addEventListener: (t, fn) => { listeners[t] = fn; },
-      skipWaiting() {}, clients: { claim: async () => {}, matchAll: async () => [] },
+      skipWaiting() {}, clients: { claim: async () => {}, matchAll: async () => [{ postMessage: (m) => posted.push(m) }] },
     },
     location: new URL('https://app.test/'),
     caches: { open: async () => cache, keys: async () => [], delete: async () => true, match: (r, o) => cache.match(r, o) },
@@ -90,4 +90,14 @@ test('SW: mở privacy.html không bị thay bằng trang chính đã lưu', asy
   const handle = loadSw({ online: true, cached: { [PAGE]: '<html>cached</html>' } });
   const res = await handle({ url: PAGE + 'privacy.html', method: 'GET', mode: 'navigate' });
   assert.equal(await res.text(), `network:${PAGE}privacy.html`);
+});
+
+test('SW: chỉ trang chính đổi nội dung mới báo "update-ready"', async () => {
+  const posted = [];
+  const cached = { [PAGE]: '<html>old</html>', [PAGE + 'privacy.html']: '<html>old</html>' };
+  const handle = loadSw({ online: true, cached, posted });
+  await handle({ url: PAGE + 'privacy.html', method: 'GET', mode: 'navigate' });
+  assert.deepEqual(posted, []);
+  await handle({ url: PAGE, method: 'GET', mode: 'navigate' });
+  assert.deepEqual(posted, ['update-ready']);
 });

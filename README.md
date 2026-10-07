@@ -26,6 +26,7 @@ Service worker chỉ chạy trên https nên không hoạt động ở localhost
 
 1. Import repo vào Vercel, Framework preset: **Other**, để trống Build Command / Output Directory.
 2. Deploy. Header bảo mật (CSP…) nằm trong `vercel.json`, không cần cấu hình thêm.
+3. Bump `VERSION` in `sw.js` on each deploy that changes JS/CSS (tăng `VERSION` mỗi lần deploy có đổi JS/CSS) — nếu không, máy đã mở app có thể chạy module cũ.
 
 ## Bật sao lưu Google Drive
 

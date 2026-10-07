@@ -1,6 +1,8 @@
 // Service worker: mở app tức thì từ bản đã lưu (stale-while-revalidate), đồng thời tải bản mới ở nền
 // cho lần mở sau. Chỉ cache file cùng domain + thư viện CDN — không bao giờ cache Google (đăng nhập, Drive).
-const CACHE = 'walley-shell-v1';
+// Tăng VERSION mỗi lần deploy có đổi JS/CSS → cache cũ bị dọn, không còn module cũ lẫn với trang mới.
+const VERSION = '1';
+const CACHE = `walley-shell-v${VERSION}`;
 // Thư viện bên ngoài (Chart.js) cũng được lưu để mở app không phải chờ mạng.
 // Lưu ý: SW tự fetch nên domain phải có trong connect-src của CSP.
 const CDN = ['https://cdn.jsdelivr.net/'];
@@ -23,7 +25,9 @@ self.addEventListener('fetch', (e) => {
     // Trang (navigate): bỏ query để luôn dùng chung 1 bản đã lưu; giữ đường dẫn để privacy.html không bị thay bằng trang chính
     const key = req.mode === 'navigate' ? new Request(url.origin + url.pathname) : req;
     const cached = await cache.match(key, { ignoreSearch: req.mode === 'navigate' });
-    const before = req.mode === 'navigate' && cached ? cached.clone() : null; // để so sánh, vì `cached` sẽ trả cho trang
+    // Chỉ trang chính ('/' hoặc '/index.html') mới so sánh để báo bản mới — privacy.html đổi không cần tải lại app
+    const mainPage = req.mode === 'navigate' && /\/(index\.html)?$/.test(url.pathname);
+    const before = mainPage && cached ? cached.clone() : null; // để so sánh, vì `cached` sẽ trả cho trang
     const network = fetch(req)
       .then(async (res) => {
         if (res.ok || res.type === 'opaque') {
