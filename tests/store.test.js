@@ -24,5 +24,6 @@ test('parseBackup: nhận file của Walley, từ chối file lạ', () => {
   const text = serialize({ ...normalize({}), payday: 5 });
   assert.equal(parseBackup(text).payday, 5);
   assert.throws(() => parseBackup('{"hello":1}'), /không đúng định dạng/);
+  assert.throws(() => parseBackup('{"app":"walley","data":"x"}'), /không đúng định dạng/);
   assert.throws(() => parseBackup('not json'));
 });

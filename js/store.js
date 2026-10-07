@@ -20,7 +20,7 @@ export const serialize = (d) => JSON.stringify({ app: 'walley', exportedAt: Date
 
 export function parseBackup(text) {
   const obj = JSON.parse(text);
-  if (obj?.app !== 'walley' || !obj.data) throw new Error('File không đúng định dạng của Walley');
+  if (obj?.app !== 'walley' || !obj.data || typeof obj.data !== 'object' || Array.isArray(obj.data)) throw new Error('File không đúng định dạng của Walley');
   return normalize(obj.data);
 }
 
@@ -44,15 +44,24 @@ export async function loadState() {
 }
 
 let timer;
+function write() {
+  timer = undefined;
+  idbSet('data', JSON.parse(JSON.stringify(state))).catch(() => {
+    storageOk = false;
+    if (typeof window !== 'undefined') window.dispatchEvent(new Event('wl:save-failed'));
+  });
+}
 function persist() {
   if (!storageOk) return;
   clearTimeout(timer);
-  timer = setTimeout(() => {
-    idbSet('data', JSON.parse(JSON.stringify(state))).catch(() => {
-      storageOk = false;
-      if (typeof window !== 'undefined') window.dispatchEvent(new Event('wl:save-failed'));
-    });
-  }, 200);
+  timer = setTimeout(write, 200);
+}
+
+/** Ghi ngay nếu còn bản lưu đang chờ (đóng app ngay sau khi nhập). */
+export function flush() {
+  if (timer === undefined) return;
+  clearTimeout(timer);
+  write();
 }
 
 /** Gọi sau mỗi thay đổi. config = đổi cấu hình (ví, hũ, danh mục, ngày lương…) → gộp giữa các máy theo lần sửa sau cùng. */
@@ -63,3 +72,6 @@ export function commit({ config = false } = {}) {
 }
 
 export const onCommit = (fn) => listeners.add(fn);
+
+if (typeof window !== 'undefined') window.addEventListener('pagehide', flush);
+if (typeof document !== 'undefined') document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flush(); });
