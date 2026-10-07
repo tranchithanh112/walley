@@ -192,7 +192,8 @@ function bindData(root, ctx) {
         const local = JSON.parse(JSON.stringify(state));
         // ponytail: -1 / MAX để bên được chọn luôn thắng, bất kể configAt trong file
         local.configAt = useFile ? -1 : Number.MAX_SAFE_INTEGER;
-        const diffCur = !useFile && data.currency !== state.currency;
+        // giữ cài đặt máy: số tiền trong file đổi ký hiệu; dùng cài đặt file: số tiền trên máy đổi ký hiệu
+        const diffCur = data.currency !== state.currency && (!useFile || state.txs.length > 0);
         replaceState(mergeBudget(local, data));
         commit({ config: true }); // configAt = bây giờ: lần đồng bộ Drive sau không ghi đè cấu hình vừa chọn
         ctx.rerender();
